@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libpq-dev \
-    netcat-openbsd \
     && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 
 # Install Composer

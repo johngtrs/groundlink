@@ -1,31 +1,4 @@
 services:
-  mysql:
-    image: mysql:8
-    container_name: groundlink-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: groundlink
-      MYSQL_USER: groundlink
-      MYSQL_PASSWORD: groundlink
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: groundlink-phpmyadmin
-    restart: unless-stopped
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    ports:
-      - "8080:80"
-    depends_on:
-      - mysql
-
   backend:
     build:
       context: ./backend
@@ -42,7 +15,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     volumes:
       - ./backend:/app
 
@@ -60,6 +34,37 @@ services:
     tty: true
     depends_on:
       - backend
+  mysql:
+    image: mysql:8
+    container_name: groundlink-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: groundlink
+      MYSQL_USER: groundlink
+      MYSQL_PASSWORD: groundlink
+      TZ: Europe/Paris
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=root
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: groundlink-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:

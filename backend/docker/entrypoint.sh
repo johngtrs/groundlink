@@ -10,17 +10,13 @@ alias pat='php artisan test'
 alias patf='php artisan test --filter'
 " >> ~/.bashrc
 
-# Wait for MySQL to be ready
-until nc -z mysql 3306; do
-  echo "Waiting for MySQL..."
-  sleep 2
-done
-
 # Install PHP dependencies
 composer install --no-interaction --prefer-dist
 
 # Laravel maintenance & DB setup
-php artisan migrate
+php artisan migrate --force
+php artisan db:seed
+
 php artisan event:clear
 php artisan view:clear
 php artisan cache:clear
