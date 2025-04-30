@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import api from './api/axios';
 import { Box, Button, Typography, Alert, Stack, TextField, Paper, Divider } from '@mui/material';
+import { useAuth } from './context/useAuth';
 
 export default function TestSanctumLogin() {
-  const [user, setUser] = useState(null);
+  const { user, login, logout } = useAuth();
   const [error, setError] = useState(null);
   const [credentials, setCredentials] = useState({
     email: '',
@@ -11,34 +11,15 @@ export default function TestSanctumLogin() {
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setCredentials((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const login = async () => {
+  const handleLogin = async () => {
     try {
-      // Get the CSRF token cookie required by Laravel Sanctum
-      await api.get('/sanctum/csrf-cookie');
-
-      // Send login credentials to the backend
-      await api.post('/login', credentials);
-
-      // Fetch the authenticated user's data
-      const res = await api.get('/api/user');
-      setUser(res.data);
-      setError(null);
+      await login(credentials);
     } catch (err) {
-      setUser(null);
       setError(err.response?.data?.message || 'Login failed');
     }
-  };
-
-  const logout = async () => {
-    await api.post('/logout');
-    setUser(null);
   };
 
   return (
@@ -61,7 +42,7 @@ export default function TestSanctumLogin() {
         {user ? (
           <Stack spacing={2}>
             <Typography>
-              Logged in as: <strong>{user.email}</strong>
+              Logged in as: <strong>{user.name}</strong>
             </Typography>
             <Button variant="contained" color="error" onClick={logout} sx={{ fontWeight: 'bold' }}>
               Logout
@@ -87,7 +68,12 @@ export default function TestSanctumLogin() {
               fullWidth
               required
             />
-            <Button variant="contained" color="primary" onClick={login} sx={{ fontWeight: 'bold' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleLogin}
+              sx={{ fontWeight: 'bold' }}
+            >
               Login
             </Button>
             {error && (
