@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Alert, Stack, TextField, Paper, Divider } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  Alert,
+  Stack,
+  TextField,
+  Paper,
+  Divider,
+  Skeleton,
+  CircularProgress,
+} from '@mui/material';
 import { useAuth } from './context/useAuth';
 
 export default function TestSanctumLogin() {
-  const { user, login, logout } = useAuth();
+  const { user, login, logout, loading } = useAuth();
   const [error, setError] = useState(null);
   const [credentials, setCredentials] = useState({
     email: '',
@@ -21,6 +32,21 @@ export default function TestSanctumLogin() {
       setError(err.response?.data?.message || 'Login failed');
     }
   };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '60vh',
+        }}
+      >
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
