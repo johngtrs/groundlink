@@ -3,6 +3,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
     container_name: groundlink-backend
     restart: unless-stopped
     environment:
@@ -14,6 +17,7 @@ services:
       DB_PASSWORD: groundlink
     ports:
       - "8000:8000"
+    user: "${UID}:${GID}"
     depends_on:
       mysql:
         condition: service_healthy
@@ -34,6 +38,7 @@ services:
     tty: true
     depends_on:
       - backend
+  
   mysql:
     image: mysql:8
     container_name: groundlink-mysql
