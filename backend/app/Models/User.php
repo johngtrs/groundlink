@@ -50,4 +50,15 @@ class User extends Authenticatable
             'password'          => 'hashed',
         ];
     }
+
+    public function band()
+    {
+        return $this->hasOne(Band::class);
+    }
+
+    public function venue()
+    {
+        return $this->hasOne(Venue::class);
+    }
+
 }
