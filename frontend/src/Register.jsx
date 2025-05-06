@@ -20,7 +20,7 @@ import { useAuth } from './context/useAuth';
 
 export default function Register() {
   const [error, setError] = useState(null);
-  const { fetchUser } = useAuth();
+  const { setAuthenticatedUser } = useAuth();
   const navigate = useNavigate();
 
   const methods = useForm({
@@ -64,9 +64,8 @@ export default function Register() {
     try {
       await api.get('/sanctum/csrf-cookie');
       const response = await api.post('api/register', payload);
-      console.log('Register Success: ', response.data);
 
-      await fetchUser();
+      setAuthenticatedUser(response.data.user);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || "L'inscription a échoué");

@@ -28,12 +28,17 @@ export default function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const setAuthenticatedUser = (userData) => {
+    setUser(userData);
+    setLoading(false);
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, fetchUser }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, setAuthenticatedUser }}>
       {children}
     </AuthContext.Provider>
   );
