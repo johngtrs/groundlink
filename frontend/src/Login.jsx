@@ -8,12 +8,12 @@ import {
   TextField,
   Paper,
   Divider,
-  Skeleton,
   CircularProgress,
 } from '@mui/material';
 import { useAuth } from './context/useAuth';
+import { Link } from 'react-router-dom';
 
-export default function TestSanctumLogin() {
+export default function Login() {
   const { user, login, logout, loading } = useAuth();
   const [error, setError] = useState(null);
   const [credentials, setCredentials] = useState({
@@ -102,6 +102,11 @@ export default function TestSanctumLogin() {
             >
               Login
             </Button>
+
+            <Typography variant="body2" mt={2}>
+              Pas encore de compte ? <Link to="/register">Register</Link>
+            </Typography>
+
             {error && (
               <Alert severity="error">
                 {typeof error === 'string' ? error : JSON.stringify(error)}
