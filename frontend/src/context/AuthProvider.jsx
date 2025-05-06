@@ -19,12 +19,12 @@ export default function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     await api.get('/sanctum/csrf-cookie');
-    await api.post('/login', credentials);
+    await api.post('/api/login', credentials);
     await fetchUser();
   };
 
   const logout = async () => {
-    await api.post('/logout');
+    await api.post('/api/logout');
     setUser(null);
   };
 
@@ -33,6 +33,8 @@ export default function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, logout, loading, fetchUser }}>
+      {children}
+    </AuthContext.Provider>
   );
 }

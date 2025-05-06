@@ -29,7 +29,7 @@ export default function Login() {
     try {
       await login(credentials);
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Échec de la connexion');
     }
   };
 
@@ -60,7 +60,7 @@ export default function Login() {
         </Typography>
 
         <Typography variant="body2" color="text.secondary" mb={3}>
-          Login with your band or venue account to access your dashboard.
+          Connectez-vous avec votre compte groupe ou salle pour accéder à votre profil.
         </Typography>
 
         <Divider sx={{ mb: 3, borderColor: 'divider' }} />
@@ -68,16 +68,16 @@ export default function Login() {
         {user ? (
           <Stack spacing={2}>
             <Typography>
-              Logged in as: <strong>{user.name}</strong>
+              Connecté en tant que : <strong>{user.name}</strong>
             </Typography>
             <Button variant="contained" color="error" onClick={logout} sx={{ fontWeight: 'bold' }}>
-              Logout
+              Se déconnecter
             </Button>
           </Stack>
         ) : (
           <Stack spacing={2}>
             <TextField
-              label="Email"
+              label="Adresse e-mail"
               name="email"
               type="email"
               value={credentials.email}
@@ -86,7 +86,7 @@ export default function Login() {
               required
             />
             <TextField
-              label="Password"
+              label="Mot de passe"
               name="password"
               type="password"
               value={credentials.password}
@@ -100,11 +100,11 @@ export default function Login() {
               onClick={handleLogin}
               sx={{ fontWeight: 'bold' }}
             >
-              Login
+              Se connecter
             </Button>
 
             <Typography variant="body2" mt={2}>
-              Pas encore de compte ? <Link to="/register">Register</Link>
+              Pas encore de compte ? <Link to="/register">Créer un compte</Link>
             </Typography>
 
             {error && (
