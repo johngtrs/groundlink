@@ -24,19 +24,18 @@ class RegisterController extends Controller
             return response()->json(['message' => $validator->errors()->first()], 422);
         }
 
-        $user = User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'type'      => $request->type,
-        ]);
+        $user = User::registerWithType($request->only('name', 'email', 'password', 'type'));
+
+        if (!$user) {
+            return response()->json(['message' => 'This email is already taken.'], 409);
+        }
 
         Auth::login($user);
         $request->session()->regenerate();
 
         return response()->json([
-            'message' => 'Register success',
+            'message' => 'Registration successful.',
             'user'    => $user,
-        ]);
+        ], 201);
     }
 }
