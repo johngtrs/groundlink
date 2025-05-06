@@ -13,6 +13,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        if (User::count() > 0) {
+            return;
+        }
+
         // Create a Band user
         $band = User::factory()->create([
            'name'     => 'Landvmrks',
