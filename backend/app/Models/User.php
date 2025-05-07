@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the polymorphic relation to the user type (Band, Venue, etc.).
+     * Get the polymorphic relation to the user type (Band, Venue).
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */

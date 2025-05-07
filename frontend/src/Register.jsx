@@ -13,10 +13,12 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, useNavigate } from 'react-router-dom';
 import FormField from './components/FormField';
 import api from './api/axios';
 import { useAuth } from './context/useAuth';
+import { registerSchema } from './validations/registerSchema';
 
 export default function Register() {
   const [error, setError] = useState(null);
@@ -24,6 +26,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const methods = useForm({
+    resolver: yupResolver(registerSchema),
     defaultValues: {
       type: '',
       name: '',
@@ -36,22 +39,11 @@ export default function Register() {
   const {
     control,
     handleSubmit,
-    setError: setFormError,
     formState: { errors },
   } = methods;
 
   const onSubmit = async (data) => {
     setError(null);
-
-    if (!data.type) {
-      setFormError('type', { type: 'manual', message: 'Veuillez sélectionner un type.' });
-      return;
-    }
-
-    if (data.password !== data.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.');
-      return;
-    }
 
     const payload = {
       name: data.name,
@@ -93,52 +85,53 @@ export default function Register() {
         <Divider sx={{ mb: 3, borderColor: 'divider' }} />
 
         <FormProvider {...methods}>
-          <Stack spacing={2}>
-            <FormControl component="fieldset" error={Boolean(errors.type)}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                En tant que quoi vous inscrivez-vous ?
-              </Typography>
-              <Controller
-                name="type"
-                control={control}
-                render={({ field }) => (
-                  <RadioGroup row {...field}>
-                    <FormControlLabel value="band" control={<Radio />} label="Groupe" />
-                    <FormControlLabel value="venue" control={<Radio />} label="Salle de concerts" />
-                  </RadioGroup>
-                )}
-              />
-              {errors.type && (
-                <Typography color="error" variant="caption">
-                  {errors.type.message}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <Stack spacing={2}>
+              <FormControl component="fieldset" error={Boolean(errors.type)}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  Quel type de compte souhaitez-vous créer ?
                 </Typography>
+                <Controller
+                  name="type"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup row {...field}>
+                      <FormControlLabel value="band" control={<Radio />} label="Groupe" />
+                      <FormControlLabel
+                        value="venue"
+                        control={<Radio />}
+                        label="Salle de concerts"
+                      />
+                    </RadioGroup>
+                  )}
+                />
+                {errors.type && (
+                  <Typography color="error" variant="caption">
+                    {errors.type.message}
+                  </Typography>
+                )}
+              </FormControl>
+
+              <FormField name="name" label="Nom" />
+              <FormField name="email" label="Adresse e-mail" type="email" />
+              <FormField name="password" label="Mot de passe" type="password" />
+              <FormField name="confirmPassword" label="Confirmer le mot de passe" type="password" />
+
+              <Button type="submit" variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
+                S'inscrire
+              </Button>
+
+              <Typography variant="body2" mt={2}>
+                Vous avez déjà un compte ? <Link to="/login">Se connecter</Link>
+              </Typography>
+
+              {error && (
+                <Alert severity="error">
+                  {typeof error === 'string' ? error : JSON.stringify(error)}
+                </Alert>
               )}
-            </FormControl>
-
-            <FormField name="name" label="Nom" />
-            <FormField name="email" label="Adresse e-mail" type="email" />
-            <FormField name="password" label="Mot de passe" type="password" />
-            <FormField name="confirmPassword" label="Confirmer le mot de passe" type="password" />
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit(onSubmit)}
-              sx={{ fontWeight: 'bold' }}
-            >
-              S'inscrire
-            </Button>
-
-            <Typography variant="body2" mt={2}>
-              Vous avez déjà un compte ? <Link to="/login">Se connecter</Link>
-            </Typography>
-
-            {error && (
-              <Alert severity="error">
-                {typeof error === 'string' ? error : JSON.stringify(error)}
-              </Alert>
-            )}
-          </Stack>
+            </Stack>
+          </form>
         </FormProvider>
       </Paper>
     </Box>
