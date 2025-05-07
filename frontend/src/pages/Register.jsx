@@ -15,10 +15,10 @@ import {
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, useNavigate } from 'react-router-dom';
-import FormField from './components/FormField';
-import api from './api/axios';
-import { useAuth } from './context/useAuth';
-import { registerSchema } from './validations/registerSchema';
+import FormField from '../components/FormField';
+import api from '../api/axios';
+import { useAuth } from '../context/useAuth';
+import { registerSchema } from '../validations/registerSchema';
 
 export default function Register() {
   const [error, setError] = useState(null);
