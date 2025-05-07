@@ -13,25 +13,24 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a Band user
-        $band = User::factory()->create([
-           'name'     => 'Landvmrks',
-           'email'    => 'band@example.com',
-           'password' => Hash::make('password'),
-        ]);
-        $band->assignRole('band');
+        if (User::count() > 0) {
+            return;
+        }
 
-        // Create a Venue user
-        $venue = User::factory()->create([
+        // Register a band user
+        User::registerWithType([
+            'name'     => 'Landvmrks',
+            'email'    => 'band@example.com',
+            'password' => 'password',
+            'type'     => 'band',
+        ]);
+
+        // Register a venue user
+        User::registerWithType([
             'name'     => 'Altherax',
             'email'    => 'venue@example.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
+            'type'     => 'venue',
         ]);
-        $venue->assignRole('venue');
-
-        // Create other random users (optional)
-        // User::factory(5)->create()->each(function ($user) {
-        //     $user->assignRole('band');
-        // });
     }
 }

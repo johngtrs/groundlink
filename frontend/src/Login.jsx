@@ -8,12 +8,12 @@ import {
   TextField,
   Paper,
   Divider,
-  Skeleton,
   CircularProgress,
 } from '@mui/material';
 import { useAuth } from './context/useAuth';
+import { Link } from 'react-router-dom';
 
-export default function TestSanctumLogin() {
+export default function Login() {
   const { user, login, logout, loading } = useAuth();
   const [error, setError] = useState(null);
   const [credentials, setCredentials] = useState({
@@ -29,7 +29,7 @@ export default function TestSanctumLogin() {
     try {
       await login(credentials);
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Échec de la connexion');
     }
   };
 
@@ -60,7 +60,7 @@ export default function TestSanctumLogin() {
         </Typography>
 
         <Typography variant="body2" color="text.secondary" mb={3}>
-          Login with your band or venue account to access your dashboard.
+          Connectez-vous avec votre compte groupe ou salle pour accéder à votre profil.
         </Typography>
 
         <Divider sx={{ mb: 3, borderColor: 'divider' }} />
@@ -68,16 +68,16 @@ export default function TestSanctumLogin() {
         {user ? (
           <Stack spacing={2}>
             <Typography>
-              Logged in as: <strong>{user.name}</strong>
+              Connecté en tant que : <strong>{user.name}</strong>
             </Typography>
             <Button variant="contained" color="error" onClick={logout} sx={{ fontWeight: 'bold' }}>
-              Logout
+              Se déconnecter
             </Button>
           </Stack>
         ) : (
           <Stack spacing={2}>
             <TextField
-              label="Email"
+              label="Adresse e-mail"
               name="email"
               type="email"
               value={credentials.email}
@@ -86,7 +86,7 @@ export default function TestSanctumLogin() {
               required
             />
             <TextField
-              label="Password"
+              label="Mot de passe"
               name="password"
               type="password"
               value={credentials.password}
@@ -100,8 +100,13 @@ export default function TestSanctumLogin() {
               onClick={handleLogin}
               sx={{ fontWeight: 'bold' }}
             >
-              Login
+              Se connecter
             </Button>
+
+            <Typography variant="body2" mt={2}>
+              Pas encore de compte ? <Link to="/register">Créer un compte</Link>
+            </Typography>
+
             {error && (
               <Alert severity="error">
                 {typeof error === 'string' ? error : JSON.stringify(error)}

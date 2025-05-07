@@ -9,11 +9,11 @@ class Venue extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'description', 'capacity', 'city_id'];
+    protected $fillable = ['name', 'description', 'capacity', 'city_id'];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphOne(User::class, 'typeable');
     }
 
     public function city()

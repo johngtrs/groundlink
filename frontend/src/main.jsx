@@ -1,20 +1,17 @@
-import { StrictMode } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
-import App from './App.jsx';
+import App from './App';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import darkTheme from './theme.js';
+import darkTheme from './theme';
 import AuthProvider from './context/AuthProvider';
-import TestSanctumLogin from './TestSanctumLogin.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <React.StrictMode>
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <AuthProvider>
-        {/* <App /> */}
-        <TestSanctumLogin />
+        <App />
       </AuthProvider>
     </ThemeProvider>
-  </StrictMode>
+  </React.StrictMode>
 );
