@@ -17,7 +17,7 @@ export default function Home() {
         mt: 10,
       }}
     >
-      <Paper elevation={6} sx={{ p: 4, borderRadius: 2, minWidth: 400 }}>
+      <Paper elevation={6} sx={{ p: 4, borderRadius: 2 }}>
         <Typography
           variant="h4"
           gutterBottom
@@ -44,18 +44,34 @@ export default function Home() {
             </Button>
           </Stack>
         ) : (
-          <Stack spacing={3} mt={4} alignItems="center">
+          <Stack spacing={3} mt={3} alignItems="center">
             <Typography variant="body1" color="text.secondary" textAlign="center">
               Connectez-vous pour accéder à votre espace personnel.
             </Typography>
-            <Button
-              variant="contained"
-              component={Link}
-              to="/login"
-              sx={{ fontWeight: 'bold', px: 5 }}
-            >
-              Se connecter
-            </Button>
+
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button
+                variant="contained"
+                component={Link}
+                to="/login"
+                sx={{ fontWeight: 'bold', px: 4 }}
+              >
+                Se connecter
+              </Button>
+
+              <Typography variant="body2" color="text.secondary">
+                ou
+              </Typography>
+
+              <Button
+                variant="outlined"
+                component={Link}
+                to="/register"
+                sx={{ fontWeight: 'bold', px: 4 }}
+              >
+                Créer un compte
+              </Button>
+            </Stack>
           </Stack>
         )}
       </Paper>

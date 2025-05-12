@@ -1,4 +1,3 @@
-// MUI 6 custom theme for Metal App
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -11,12 +10,12 @@ const theme = createTheme({
       main: '#9A0007', // dark red
     },
     background: {
-      default: '#14171a', // main background
+      default: '#14171a',
       paper: '#181b1f', // surfaces (cards, modals, etc.)
     },
     text: {
-      primary: '#FFFFFF', // main text
-      secondary: '#CCCCCC', // secondary text
+      primary: '#FFFFFF',
+      secondary: '#CCCCCC',
     },
     success: {
       main: '#388E3C',
@@ -51,7 +50,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: 'none', // remove gradient
+          backgroundImage: 'none',
         },
       },
     },

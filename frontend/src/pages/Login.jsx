@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Typography,
-  Alert,
-  Stack,
-  TextField,
-  Paper,
-  Divider,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Button, Typography, Alert, Stack, TextField, Paper, Divider } from '@mui/material';
 import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const [error, setError] = useState(null);
   const [credentials, setCredentials] = useState({ email: '', password: '' });
 
@@ -73,6 +63,7 @@ export default function Login() {
             required
           />
           <Button
+            loading={loading}
             variant="contained"
             color="primary"
             onClick={handleLogin}
