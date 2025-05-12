@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Typography, Alert, Stack, TextField, Paper, Divider } from '@mui/material';
 import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
+import PasswordField from '../components/PasswordField';
 
 export default function Login() {
   const { login, loading } = useAuth();
@@ -53,15 +54,9 @@ export default function Login() {
             fullWidth
             required
           />
-          <TextField
-            label="Mot de passe"
-            name="password"
-            type="password"
-            value={credentials.password}
-            onChange={handleChange}
-            fullWidth
-            required
-          />
+
+          <PasswordField name="password" value={credentials.password} onChange={handleChange} />
+
           <Button
             loading={loading}
             variant="contained"
