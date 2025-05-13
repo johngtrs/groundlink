@@ -3,9 +3,10 @@ import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout, initialLoading } = useAuth();
 
-  if (loading) {
+  // Avoid clipping
+  if (initialLoading) {
     return null;
   }
 

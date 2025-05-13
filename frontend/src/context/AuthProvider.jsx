@@ -5,6 +5,7 @@ import AuthContext from './AuthContext';
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true); // Avoid home clipping
 
   const fetchUser = async () => {
     try {
@@ -14,6 +15,7 @@ export default function AuthProvider({ children }) {
       setUser(null);
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -51,7 +53,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, register, loading, initialLoading }}>
       {children}
     </AuthContext.Provider>
   );
