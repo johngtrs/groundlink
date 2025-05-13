@@ -10,9 +10,6 @@ alias pat='php artisan test'
 alias patf='php artisan test --filter'
 " >> ~/.bashrc
 
-# Install PHP dependencies
-composer install --no-interaction --prefer-dist
-
 # Laravel maintenance & DB setup
 php artisan migrate --force
 php artisan db:seed

@@ -30,6 +30,9 @@ RUN chown -R appuser:appgroup /app
 # Copy application source code
 COPY . .
 
+# Install PHP dependencies via Composer
+RUN composer install --no-dev --optimize-autoloader
+
 # Copy and make the entrypoint script executable
 COPY docker/entrypoint.sh /docker/entrypoint.sh
 RUN chmod +x /docker/entrypoint.sh

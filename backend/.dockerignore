@@ -1,0 +1,33 @@
+# Dépendances
+/vendor
+/node_modules
+
+# Environnements
+.env
+.env.*
+*.env
+
+# Caches Laravel
+/storage/*.key
+/storage/framework/*
+!/storage/framework/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Fichiers système et IDE
+.DS_Store
+.vscode
+.idea
+
+# Tests & outils
+.php-cs-fixer.dist.php
+.phpunit.result.cache
+
+# Git
+.git
+.gitignore
+
+# Autres fichiers inutiles dans l'image
+README.md

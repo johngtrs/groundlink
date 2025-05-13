@@ -52,7 +52,6 @@ export default function Login() {
             value={credentials.email}
             onChange={handleChange}
             fullWidth
-            required
           />
 
           <PasswordField name="password" value={credentials.password} onChange={handleChange} />
