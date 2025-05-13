@@ -35,14 +35,25 @@ export default function Home() {
             <Typography variant="body2" color="text.secondary">
               Vous êtes connecté à votre espace Ground Link.
             </Typography>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={logout}
-              sx={{ fontWeight: 'bold', mt: 2 }}
-            >
-              Se déconnecter
-            </Button>
+
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button
+                variant="contained"
+                component={Link}
+                to="/profile"
+                sx={{ fontWeight: 'bold', px: 4 }}
+              >
+                Voir mon profil
+              </Button>
+
+              <Typography variant="body2" color="text.secondary">
+                ou
+              </Typography>
+
+              <Button variant="outlined" onClick={logout} sx={{ fontWeight: 'bold', mt: 2 }}>
+                Se déconnecter
+              </Button>
+            </Stack>
           </Stack>
         ) : (
           <Stack spacing={3} mt={3} alignItems="center">
