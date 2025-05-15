@@ -33,16 +33,7 @@ export default function ProfileView() {
         </Typography>
 
         <Stack spacing={2} mt={2}>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Avatar
-              src={
-                profilePicture ||
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-A5eHDWdwLOz3nCkfocCkaqRNCXVHXOzV-A&s'
-              }
-              alt="Photo de profil"
-              sx={{ width: 150, height: 150 }}
-            />
-          </Box>
+          <AvatarUploader avatarUrl={profilePicture} />
 
           <Typography>
             <strong>Nom :</strong> {name}
