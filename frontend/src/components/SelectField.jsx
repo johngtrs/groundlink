@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Chip,
-  OutlinedInput,
-  FormHelperText,
-  CircularProgress,
-} from '@mui/material';
+import { Autocomplete, TextField, CircularProgress } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import api from '../api/axios';
 
@@ -50,71 +41,33 @@ export default function SelectField({
       name={name}
       control={control}
       render={({ field }) => (
-        <FormControl fullWidth error={Boolean(errors[name])}>
-          <InputLabel>{label}</InputLabel>
-          <Select
-            {...field}
-            value={multiple ? field.value || [] : field.value || ''}
-            multiple={multiple}
-            input={<OutlinedInput label={label} />}
-            onChange={(e) => field.onChange(e.target.value)}
-            MenuProps={{
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'left',
-              },
-              transformOrigin: {
-                vertical: 'top',
-                horizontal: 'left',
-              },
-              PaperProps: {
-                style: {
-                  maxHeight: 300,
-                  overflowY: 'auto',
-                },
-              },
-            }}
-            renderValue={(selected) =>
-              multiple ? (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {selected.map((value) => {
-                    const selectedOption = options.find(
-                      (option) => getOptionValue(option) === value
-                    );
-                    if (!selectedOption) return null;
-                    return (
-                      <Chip
-                        key={value}
-                        label={getOptionLabel(selectedOption)}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onDelete={() => {
-                          const newValue = field.value.filter((v) => v !== value);
-                          field.onChange(newValue);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              ) : (
-                getOptionLabel(options.find((option) => getOptionValue(option) === selected) || {})
-              )
-            }
-            {...rest}
-          >
-            {loading ? (
-              <MenuItem disabled>
-                <CircularProgress size={24} />
-              </MenuItem>
-            ) : (
-              options.map((option) => (
-                <MenuItem key={getOptionValue(option)} value={getOptionValue(option)}>
-                  {getOptionLabel(option)}
-                </MenuItem>
-              ))
-            )}
-          </Select>
-          {errors[name] && <FormHelperText>{errors[name]?.message}</FormHelperText>}
-        </FormControl>
+        <Autocomplete
+          multiple={multiple}
+          options={options}
+          getOptionLabel={getOptionLabel}
+          isOptionEqualToValue={(option, value) => getOptionValue(option) === getOptionValue(value)}
+          loading={loading}
+          onChange={(_, data) => {
+            const value = multiple
+              ? data.map((item) => getOptionValue(item))
+              : getOptionValue(data);
+            field.onChange(value);
+          }}
+          value={
+            multiple
+              ? options.filter((opt) => (field.value || []).includes(getOptionValue(opt)))
+              : options.find((opt) => getOptionValue(opt) === field.value) || null
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={label}
+              error={Boolean(errors[name])}
+              helperText={errors[name]?.message}
+            />
+          )}
+          {...rest}
+        />
       )}
     />
   );

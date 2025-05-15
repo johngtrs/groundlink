@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Box, Button, Typography, Stack, Paper, Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Button, Typography, Stack, Paper, Divider, CircularProgress } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useAuth } from '../context/useAuth';
 import FormField from '../components/FormField';
@@ -11,6 +11,7 @@ export default function ProfileEdit() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const methods = useForm();
   const { handleSubmit, reset } = methods;
 
@@ -33,6 +34,8 @@ export default function ProfileEdit() {
         });
       } catch (error) {
         console.error('Erreur lors du chargement du profil :', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,6 +50,14 @@ export default function ProfileEdit() {
       console.error('Erreur lors de la mise à jour du profil :', error);
     }
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
