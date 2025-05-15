@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -56,5 +56,23 @@ class ProfileController extends Controller
         $user->typeable->update($validated);
 
         return response()->json($user->fresh()->load('typeable'));
+    }
+
+    public function updateAvatar(Request $request): JsonResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+        $path = $request->file('avatar')->store('avatars', 'public');
+
+        $typeable = $user->typeable;
+        $typeable->avatar = $path;
+        $typeable->save();
+
+        return response()->json([
+            'avatar' => asset('storage/' . $path),
+        ]);
     }
 }

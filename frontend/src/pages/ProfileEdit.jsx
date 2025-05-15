@@ -18,7 +18,6 @@ export default function ProfileEdit() {
     resolver: yupResolver(profileSchema),
     defaultValues: {
       name: '',
-      profilePicture: '',
       genres: [],
       spotify: '',
       website: '',
@@ -38,7 +37,6 @@ export default function ProfileEdit() {
 
         reset({
           name: data?.typeable?.name ?? '',
-          profilePicture: data?.profilePicture ?? '',
           genres: data?.typeable?.genres?.map((g) => g.id) ?? [],
           spotify: data?.typeable?.spotify ?? '',
           website: data?.typeable?.website ?? '',
@@ -90,7 +88,6 @@ export default function ProfileEdit() {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack spacing={2}>
-              <FormField name="profilePicture" label="Photo de profil (URL)" />
               <FormField name="name" label="Nom" />
 
               {user?.type === 'band' && (

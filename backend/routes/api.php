@@ -21,5 +21,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
 
+    Route::get('/profile/avatar', [ProfileController::class, 'getAvatar']);
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
+
+
     Route::get('/genres', [GenreController::class, 'index']);
 });

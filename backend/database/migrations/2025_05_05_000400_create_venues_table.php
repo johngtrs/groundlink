@@ -13,13 +13,12 @@ return new class () extends Migration {
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->foreignId('city_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('avatar')->nullable();
             $table->string('name');
+            $table->string('avatar')->nullable();
             $table->string('address')->nullable();
             $table->string('website')->nullable();
             $table->text('description')->nullable();
             $table->integer('capacity')->nullable();
-
             $table->timestamps();
         });
     }

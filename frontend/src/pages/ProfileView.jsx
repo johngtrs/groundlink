@@ -3,6 +3,7 @@ import { Box, Typography, Paper, Stack, Button, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import BackToHomeButton from '../components/BackToHomeButton';
+import AvatarUploader from '../components/AvatarUploader';
 
 export default function ProfileView() {
   const [profile, setProfile] = useState(null);
@@ -22,7 +23,7 @@ export default function ProfileView() {
 
   if (!profile) return null;
 
-  const { name, profilePicture, type, typeable } = profile;
+  const { name, type, typeable } = profile;
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
@@ -33,7 +34,9 @@ export default function ProfileView() {
         </Typography>
 
         <Stack spacing={2} mt={2}>
-          <AvatarUploader avatarUrl={profilePicture} />
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <AvatarUploader avatarUrl={typeable?.avatar} />
+          </Box>
 
           <Typography>
             <strong>Nom :</strong> {name}
