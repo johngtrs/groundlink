@@ -3,7 +3,7 @@ import { Autocomplete, TextField, CircularProgress } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import api from '../api/axios';
 
-export default function SelectField({
+export default function SelectSearchField({
   name,
   label,
   endpoint,

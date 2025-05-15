@@ -5,7 +5,7 @@ import { useAuth } from '../context/useAuth';
 import FormField from '../components/FormField';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-import SelectField from '../components/SelectField';
+import SelectSearchField from '../components/SelectSearchField';
 
 export default function ProfileEdit() {
   const { user } = useAuth();
@@ -80,13 +80,14 @@ export default function ProfileEdit() {
 
               {user?.type === 'band' && (
                 <>
-                  <SelectField
+                  <SelectSearchField
                     name="genres"
                     label="Genres musicaux"
                     endpoint="/api/genres"
                     multiple
                     getOptionLabel={(option) => option.name}
                     getOptionValue={(option) => option.id}
+                    disableCloseOnSelect
                   />
                   <FormField name="spotify" label="Lien Spotify" />
                   <FormField name="website" label="Site web" />
