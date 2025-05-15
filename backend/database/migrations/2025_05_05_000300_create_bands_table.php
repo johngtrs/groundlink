@@ -15,6 +15,8 @@ return new class () extends Migration {
             $table->foreignId('city_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('spotify')->nullable();
+            $table->string('website')->nullable();
             $table->timestamps();
         });
     }

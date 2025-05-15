@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -31,32 +32,28 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name'           => ['string', 'max:255'],
-            'profilePicture' => ['nullable', 'url', 'max:2048'],
+            'name'                  => ['required', 'string', 'max:255'],
+            'profilePicture'        => ['nullable', 'url', 'max:2048'],
+            'description'           => ['nullable', 'string', 'max:255'],
             // Band
-            'genre'          => ['nullable', 'string', 'max:255'],
-            'spotify'        => ['nullable', 'url', 'max:2048'],
+            'genres'          => ['nullable', 'array'],
+            'spotify'         => ['nullable', 'url', 'max:2048'],
             // Venue
-            'website'        => ['nullable', 'url', 'max:2048'],
-            'address'        => ['nullable', 'string', 'max:255'],
-            'city'           => ['nullable', 'string', 'max:255'],
-            'capacity'       => ['nullable', 'integer', 'min:0'],
+            'website'               => ['nullable', 'url', 'max:2048'],
+            'address'               => ['nullable', 'string', 'max:255'],
+            'city'                  => ['nullable', 'string', 'max:255'],
+            'capacity'              => ['nullable', 'integer', 'min:0'],
         ]);
 
-        // $user->update([
-        //     'profilePicture' => $validated['profilePicture'] ?? $user->profilePicture,
-        // ]);
+        $user->update(['name' => $validated['name']]);
+
+        if ($user->type === 'band' && isset($validated['genres'])) {
+            $user->typeable->genres()->sync($validated['genres']);
+            unset($validated['genres']);
+        }
 
         // Update the related polymorphic model
-        $user->typeable->update(array_filter([
-            'name'           => $validated['name'] ?? $user->name,
-            'genre'          => $validated['genre'] ?? null,
-            'spotify'        => $validated['spotify'] ?? null,
-            'website'        => $validated['website'] ?? null,
-            'address'        => $validated['address'] ?? null,
-            'city'           => $validated['city'] ?? null,
-            'capacity'       => $validated['capacity'] ?? null,
-        ]));
+        $user->typeable->update($validated);
 
         return response()->json($user->fresh()->load('typeable'));
     }

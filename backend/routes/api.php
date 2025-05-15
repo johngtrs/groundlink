@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\GenreController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SanctumAuthController;
@@ -19,4 +20,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
+
+    Route::get('/genres', [GenreController::class, 'index']);
 });

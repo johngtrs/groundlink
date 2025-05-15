@@ -9,7 +9,15 @@ class Band extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'city_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'spotify',
+        'website',
+        'city_id'
+    ];
+
+    protected $with = ['genres'];
 
     public function user()
     {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Stack, Button } from '@mui/material';
+import { Box, Typography, Paper, Stack, Button, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 
@@ -31,20 +31,16 @@ export default function ProfileView() {
         </Typography>
 
         <Stack spacing={2} mt={2}>
-          <img
-            src={
-              profilePicture ||
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-A5eHDWdwLOz3nCkfocCkaqRNCXVHXOzV-A&s'
-            }
-            alt="Photo de profil"
-            style={{
-              width: 150,
-              height: 150,
-              borderRadius: '50%',
-              objectFit: 'cover',
-              alignSelf: 'center',
-            }}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Avatar
+              src={
+                profilePicture ||
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-A5eHDWdwLOz3nCkfocCkaqRNCXVHXOzV-A&s'
+              }
+              alt="Photo de profil"
+              sx={{ width: 150, height: 150 }}
+            />
+          </Box>
 
           <Typography>
             <strong>Nom :</strong> {name}
@@ -53,7 +49,7 @@ export default function ProfileView() {
           {type === 'band' && (
             <>
               <Typography>
-                <strong>Genre :</strong> {typeable?.genre ?? ''}
+                <strong>Genres :</strong> {typeable.genres.map((genre) => genre.name).join(', ')}
               </Typography>
               <Typography>
                 <strong>Spotify :</strong> {typeable?.spotify ?? ''}
@@ -80,6 +76,10 @@ export default function ProfileView() {
               </Typography>
             </>
           )}
+
+          <Typography>
+            <strong>Description :</strong> {typeable?.description ?? ''}
+          </Typography>
 
           <Button
             variant="contained"

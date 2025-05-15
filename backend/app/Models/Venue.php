@@ -9,7 +9,15 @@ class Venue extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'capacity', 'city_id'];
+    protected $fillable = [
+        'avatar',
+        'name',
+        'description',
+        'capacity',
+        'address',
+        'city_id',
+        'website'
+    ];
 
     public function user()
     {
