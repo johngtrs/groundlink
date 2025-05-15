@@ -18,6 +18,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import FormField from '../components/FormField';
 import { useAuth } from '../context/useAuth';
 import { registerSchema } from '../validations/registerSchema';
+import BackToHomeButton from '../components/BackToHomeButton';
 
 export default function Register() {
   const [error, setError] = useState(null);
@@ -66,15 +67,7 @@ export default function Register() {
         elevation={6}
         sx={{ p: 4, bgcolor: 'background.paper', borderRadius: 1, width: '100%', maxWidth: 500 }}
       >
-        <Button
-          component={Link}
-          to="/"
-          variant="text"
-          sx={{ mb: 2, textTransform: 'none', alignSelf: 'flex-start' }}
-        >
-          ← Retour à l’accueil
-        </Button>
-
+        <BackToHomeButton />
         <Typography
           variant="h4"
           gutterBottom

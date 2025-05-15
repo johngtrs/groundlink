@@ -6,13 +6,28 @@ import FormField from '../components/FormField';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import SelectSearchField from '../components/SelectSearchField';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { profileSchema } from '../validations/profileSchema';
 
 export default function ProfileEdit() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const methods = useForm();
+  const methods = useForm({
+    resolver: yupResolver(profileSchema),
+    defaultValues: {
+      name: '',
+      profilePicture: '',
+      genres: [],
+      spotify: '',
+      website: '',
+      address: '',
+      city: '',
+      capacity: '',
+      description: '',
+    },
+  });
   const { handleSubmit, reset } = methods;
 
   useEffect(() => {
@@ -22,15 +37,15 @@ export default function ProfileEdit() {
         const data = response.data;
 
         reset({
-          name: data?.typeable?.name || '',
-          profilePicture: data?.profilePicture || '',
-          genres: data?.typeable?.genres?.map((g) => g.id) || [],
-          spotify: data?.typeable?.spotify || '',
-          website: data?.typeable?.website || '',
-          address: data?.typeable?.address || '',
-          city: data?.typeable?.city || '',
-          capacity: data?.typeable?.capacity || '',
-          description: data?.typeable?.description || '',
+          name: data?.typeable?.name ?? '',
+          profilePicture: data?.profilePicture ?? '',
+          genres: data?.typeable?.genres?.map((g) => g.id) ?? [],
+          spotify: data?.typeable?.spotify ?? '',
+          website: data?.typeable?.website ?? '',
+          address: data?.typeable?.address ?? '',
+          city: data?.typeable?.city ?? '',
+          capacity: data?.typeable?.capacity ?? '',
+          description: data?.typeable?.description ?? '',
         });
       } catch (error) {
         console.error('Erreur lors du chargement du profil :', error);

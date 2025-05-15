@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Stack, Button, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
+import BackToHomeButton from '../components/BackToHomeButton';
 
 export default function ProfileView() {
   const [profile, setProfile] = useState(null);
@@ -26,6 +27,7 @@ export default function ProfileView() {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
       <Paper elevation={6} sx={{ p: 4, borderRadius: 2, maxWidth: 600, width: '100%' }}>
+        <BackToHomeButton />
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center' }}>
           Mon profil
         </Typography>

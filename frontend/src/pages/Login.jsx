@@ -3,6 +3,7 @@ import { Box, Button, Typography, Alert, Stack, TextField, Paper, Divider } from
 import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
 import PasswordField from '../components/PasswordField';
+import BackToHomeButton from '../components/BackToHomeButton';
 
 export default function Login() {
   const { login, loading } = useAuth();
@@ -24,15 +25,7 @@ export default function Login() {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
       <Paper elevation={6} sx={{ p: 4, borderRadius: 1 }}>
-        <Button
-          component={Link}
-          to="/"
-          variant="text"
-          sx={{ mb: 2, textTransform: 'none', alignSelf: 'flex-start' }}
-        >
-          ← Retour à l’accueil
-        </Button>
-
+        <BackToHomeButton />
         <Typography
           variant="h4"
           gutterBottom
