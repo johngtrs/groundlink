@@ -6,14 +6,10 @@ export const profileSchema = yup.object({
     .required('Le nom est requis.')
     .max(255, 'Le nom ne peut pas dépasser 255 caractères.'),
 
-  profilePicture: yup.string().nullable().url('Lien invalide.').max(2048, 'L’URL est trop longue.'),
-
   description: yup
     .string()
     .nullable()
     .max(255, 'La description ne peut pas dépasser 255 caractères.'),
-
-  genres: yup.array().of(yup.number()).nullable(),
 
   spotify: yup
     .string()

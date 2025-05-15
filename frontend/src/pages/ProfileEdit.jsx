@@ -24,7 +24,7 @@ export default function ProfileEdit() {
       website: '',
       address: '',
       city: '',
-      capacity: '',
+      capacity: null,
       description: '',
     },
   });
@@ -44,7 +44,7 @@ export default function ProfileEdit() {
           website: data?.typeable?.website ?? '',
           address: data?.typeable?.address ?? '',
           city: data?.typeable?.city ?? '',
-          capacity: data?.typeable?.capacity ?? '',
+          capacity: data?.typeable?.capacity ?? null,
           description: data?.typeable?.description ?? '',
         });
       } catch (error) {
