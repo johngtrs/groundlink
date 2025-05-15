@@ -9,7 +9,7 @@ export const profileSchema = yup.object({
   description: yup
     .string()
     .nullable()
-    .max(255, 'La description ne peut pas dépasser 255 caractères.'),
+    .max(2000, 'La description ne peut pas dépasser 2000 caractères.'),
 
   spotify: yup
     .string()

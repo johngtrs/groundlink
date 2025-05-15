@@ -34,7 +34,7 @@ class ProfileController extends Controller
         $validated = $request->validate([
             'name'                  => ['required', 'string', 'max:255'],
             'profilePicture'        => ['nullable', 'url', 'max:2048'],
-            'description'           => ['nullable', 'string', 'max:255'],
+            'description'           => ['nullable', 'string', 'max:2000'],
             // Band
             'genres'          => ['nullable', 'array'],
             'spotify'         => ['nullable', 'url', 'max:2048'],
