@@ -87,7 +87,7 @@ class ProfileController extends Controller
 
         Storage::disk('private')->put($path, $image);
 
-        return response()->json(['message' => 'Avatar mis à jour']);
+        return response()->json(['message' => 'Avatar updated']);
     }
 
     public function deleteAvatar(Request $request)
@@ -99,7 +99,7 @@ class ProfileController extends Controller
             Storage::disk('private')->delete($path);
         }
 
-        return response()->json(['message' => 'Avatar supprimé']);
+        return response()->json(['message' => 'Avatar updated']);
     }
 
     private function getAvatarPath(string $type, int $id): string

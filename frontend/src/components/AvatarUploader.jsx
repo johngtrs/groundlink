@@ -12,108 +12,98 @@ import {
   DialogActions,
   Slider,
 } from '@mui/material';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import Cropper from 'react-easy-crop';
 import api from '../api/axios';
 import { readFile } from '../utils/fileUtils';
 import getCroppedImg from '../utils/cropImage';
 
+const DEFAULT_AVATAR = '/images/default-avatar.jpg';
+
 export default function AvatarUploader({ onUpload }) {
   const inputRef = useRef(null);
-  const [preview, setPreview] = useState(null);
-  const [blobUrl, setBlobUrl] = useState(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [cropOpen, setCropOpen] = useState(false);
-
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [objectUrl, setObjectUrl] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [isCropOpen, setIsCropOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const DEFAULT_AVATAR = '/images/default-avatar.jpg';
-
-  const fetchAvatar = async () => {
+  const loadAvatar = async () => {
     try {
-      const response = await api.get(`/api/profile/avatar?v=${Date.now()}`, {
+      const res = await api.get(`/api/profile/avatar?v=${Date.now()}`, {
         responseType: 'blob',
         validateStatus: (status) => status === 200 || status === 204,
       });
 
-      if (response.status === 204) {
-        setPreview(DEFAULT_AVATAR);
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+
+      if (res.status === 204) {
+        setAvatarUrl(DEFAULT_AVATAR);
         return;
       }
 
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-
-      const url = URL.createObjectURL(response.data);
-      setPreview(url);
-      setBlobUrl(url);
-    } catch (err) {
-      console.error('Erreur lors de la récupération de l’avatar :', err);
-      setPreview(DEFAULT_AVATAR);
+      const url = URL.createObjectURL(res.data);
+      setAvatarUrl(url);
+      setObjectUrl(url);
+    } catch (error) {
+      console.error('Erreur lors du chargement de l’avatar :', error);
+      setAvatarUrl(DEFAULT_AVATAR);
     }
   };
 
-  const onCropComplete = useCallback((croppedArea, croppedPixels) => {
-    setCroppedAreaPixels(croppedPixels);
-  }, []);
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
+  const handleImageSelect = async (e) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const imageDataUrl = await readFile(file);
     setSelectedImage(imageDataUrl);
-    setCropOpen(true);
+    setIsCropOpen(true);
   };
 
+  const handleCropComplete = useCallback((_, croppedPixels) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
+
   const handleCropSave = async () => {
-    if (!croppedAreaPixels || !selectedImage) return;
+    if (!selectedImage || !croppedAreaPixels) return;
 
     try {
       const croppedBlob = await getCroppedImg(selectedImage, croppedAreaPixels);
-
-      if (!croppedBlob) {
-        console.error('Blob vide généré');
-        return;
-      }
-
+      const file = new File([croppedBlob], 'avatar.jpg', { type: 'image/jpeg' });
       const formData = new FormData();
-      const fileName = 'avatar.jpg';
-      const file = new File([croppedBlob], fileName, { type: 'image/jpeg' });
-
       formData.append('avatar', file);
 
       await api.post('/api/profile/avatar', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      await fetchAvatar();
+      await loadAvatar();
       if (onUpload) onUpload();
-      setCropOpen(false);
-    } catch (err) {
-      console.error("Erreur lors de l'envoi de l'avatar :", err);
+      setIsCropOpen(false);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'avatar :", error);
     }
   };
 
   const handleDeleteAvatar = async () => {
     try {
       await api.delete('/api/profile/avatar');
-      await fetchAvatar();
+      await loadAvatar();
       if (onUpload) onUpload();
-      setBlobUrl(null);
-    } catch (err) {
-      console.error('Erreur lors de la suppression de l’avatar :', err);
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l’avatar :', error);
     } finally {
-      setConfirmOpen(false);
+      setIsDeleteDialogOpen(false);
     }
   };
 
   useEffect(() => {
-    fetchAvatar();
+    loadAvatar();
     return () => {
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, []);
 
@@ -127,10 +117,10 @@ export default function AvatarUploader({ onUpload }) {
           '&:hover .overlay': { opacity: 1 },
         }}
       >
-        {!preview ? (
+        {!avatarUrl ? (
           <Skeleton variant="circular" width={150} height={150} />
         ) : (
-          <Avatar src={preview} alt="Avatar" sx={{ width: 150, height: 150 }} />
+          <Avatar src={avatarUrl} alt="Avatar" sx={{ width: 150, height: 150 }} />
         )}
 
         <Box
@@ -150,37 +140,62 @@ export default function AvatarUploader({ onUpload }) {
             transition: 'opacity 0.3s',
           }}
         >
-          <IconButton color="primary" onClick={() => inputRef.current?.click()}>
-            <PhotoCamera sx={{ color: '#fff' }} />
+          <IconButton
+            color="primary"
+            onClick={() => inputRef.current?.click()}
+            aria-label="Télécharger un avatar"
+          >
+            <PhotoCameraIcon sx={{ color: '#fff' }} />
           </IconButton>
-          <input ref={inputRef} type="file" accept="image/*" hidden onChange={handleImageChange} />
+          <input type="file" accept="image/*" hidden ref={inputRef} onChange={handleImageSelect} />
         </Box>
       </Box>
 
-      {blobUrl && (
-        <Button onClick={() => setConfirmOpen(true)} variant="outlined" size="small" sx={{ mt: 1 }}>
+      {avatarUrl && avatarUrl !== DEFAULT_AVATAR && (
+        <Button
+          variant="outlined"
+          size="small"
+          sx={{ mt: 1 }}
+          onClick={() => {
+            document.activeElement.blur();
+            setIsDeleteDialogOpen(true);
+          }}
+        >
           Supprimer l’image
         </Button>
       )}
 
-      {/* Delete dialog*/}
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Confirmer la suppression</DialogTitle>
+      {/* Dialog suppression */}
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">Confirmer la suppression</DialogTitle>
         <DialogContent>
-          <DialogContentText>Êtes-vous sûr de vouloir supprimer votre avatar ?</DialogContentText>
+          <DialogContentText id="delete-dialog-description">
+            Êtes-vous sûr de vouloir supprimer votre avatar ?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)}>Annuler</Button>
+          <Button onClick={() => setIsDeleteDialogOpen(false)}>Annuler</Button>
           <Button onClick={handleDeleteAvatar} color="error" autoFocus>
             Supprimer
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Crop dialog */}
-      <Dialog open={cropOpen} maxWidth="sm" fullWidth onClose={() => setCropOpen(false)}>
-        <DialogTitle>Recadrer l’image</DialogTitle>
-        <DialogContent sx={{ position: 'relative', height: 400 }}>
+      {/* Dialog de recadrage */}
+      <Dialog
+        open={isCropOpen}
+        onClose={() => setIsCropOpen(false)}
+        fullWidth
+        maxWidth="sm"
+        aria-labelledby="crop-dialog-title"
+      >
+        <DialogTitle id="crop-dialog-title">Recadrer l’image</DialogTitle>
+        <DialogContent sx={{ height: 400, position: 'relative' }}>
           <Cropper
             image={selectedImage}
             crop={crop}
@@ -190,7 +205,7 @@ export default function AvatarUploader({ onUpload }) {
             showGrid={false}
             onCropChange={setCrop}
             onZoomChange={setZoom}
-            onCropComplete={onCropComplete}
+            onCropComplete={handleCropComplete}
           />
         </DialogContent>
         <Box px={3} pt={1}>
@@ -199,12 +214,12 @@ export default function AvatarUploader({ onUpload }) {
             min={1}
             max={3}
             step={0.1}
-            onChange={(e, z) => setZoom(z)}
+            onChange={(e, value) => setZoom(value)}
             aria-label="Zoom"
           />
         </Box>
         <DialogActions>
-          <Button onClick={() => setCropOpen(false)}>Annuler</Button>
+          <Button onClick={() => setIsCropOpen(false)}>Annuler</Button>
           <Button onClick={handleCropSave} variant="contained">
             Enregistrer
           </Button>
