@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\ImageConverter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -63,26 +64,42 @@ class ProfileController extends Controller
     public function getAvatar(Request $request)
     {
         $user = $request->user();
-        $path = $user->typeable->avatar;
+        $type = $user->type;
+        $typeableId = $user->typeable->id;
+        $folder = "{$type}_{$typeableId}/avatar";
 
-        if (!$path || !Storage::disk('private')->exists($path)) {
-            return response('', 204);
+        $files = Storage::disk('private')->files($folder);
+        $avatarFile = collect($files)->first();
+
+        if (!$avatarFile || !Storage::disk('private')->exists($avatarFile)) {
+            return response()->json(['message' => 'Avatar non trouvé'], 204);
         }
 
-        return response()->file(Storage::disk('private')->path($path));
+        return response()->file(Storage::disk('private')->path($avatarFile));
     }
 
-    public function updateAvatar(Request $request): JsonResponse
+    public function updateAvatar(Request $request)
     {
         $request->validate([
             'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         $user = $request->user();
-        $path = $request->file('avatar')->store('avatars', 'private');
+        $type = $user->type;
+        $typeableId = $user->typeable->id;
 
-        $user->typeable->avatar = $path;
-        $user->typeable->save();
+        $extension = $request->file('avatar')->extension();
+        $folder = "{$type}_{$typeableId}/avatar";
+        $filename = "avatar.{$extension}";
+
+        if (Storage::disk('private')->exists($folder)) {
+            $files = Storage::disk('private')->files($folder);
+            foreach ($files as $file) {
+                Storage::disk('private')->delete($file);
+            }
+        }
+
+        $request->file('avatar')->storeAs($folder, $filename, 'private');
 
         return response()->json(['message' => 'Avatar updated']);
     }
@@ -90,15 +107,18 @@ class ProfileController extends Controller
     public function deleteAvatar(Request $request)
     {
         $user = $request->user();
-        $typeable = $user->typeable;
+        $type = $user->type;
+        $typeableId = $user->typeable->id;
+        $folder = "{$type}_{$typeableId}/avatar";
 
-        if ($typeable->avatar && Storage::disk('private')->exists($typeable->avatar)) {
-            Storage::disk('private')->delete($typeable->avatar);
+        if (Storage::disk('private')->exists($folder)) {
+            $files = Storage::disk('private')->files($folder);
+            foreach ($files as $file) {
+                Storage::disk('private')->delete($file);
+            }
         }
-
-        $typeable->avatar = null;
-        $typeable->save();
 
         return response()->json(['message' => 'Avatar deleted']);
     }
+
 }
