@@ -14,7 +14,6 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('city_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
-            $table->string('avatar')->nullable();
             $table->string('address')->nullable();
             $table->string('website')->nullable();
             $table->text('description')->nullable();
