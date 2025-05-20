@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -10,15 +10,26 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Slider,
 } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import Cropper from 'react-easy-crop';
 import api from '../api/axios';
+import { readFile } from '../utils/fileUtils';
+import getCroppedImg from '../utils/cropImage';
 
 export default function AvatarUploader({ onUpload }) {
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const [blobUrl, setBlobUrl] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [cropOpen, setCropOpen] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
   const DEFAULT_AVATAR = '/images/default-avatar.jpg';
 
   const fetchAvatar = async () => {
@@ -33,9 +44,7 @@ export default function AvatarUploader({ onUpload }) {
         return;
       }
 
-      if (blobUrl) {
-        URL.revokeObjectURL(blobUrl);
-      }
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
 
       const url = URL.createObjectURL(response.data);
       setPreview(url);
@@ -46,22 +55,45 @@ export default function AvatarUploader({ onUpload }) {
     }
   };
 
+  const onCropComplete = useCallback((croppedArea, croppedPixels) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
+
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('avatar', file);
+    const imageDataUrl = await readFile(file);
+    setSelectedImage(imageDataUrl);
+    setCropOpen(true);
+  };
+
+  const handleCropSave = async () => {
+    if (!croppedAreaPixels || !selectedImage) return;
 
     try {
+      const croppedBlob = await getCroppedImg(selectedImage, croppedAreaPixels);
+
+      if (!croppedBlob) {
+        console.error('Blob vide généré');
+        return;
+      }
+
+      const formData = new FormData();
+      const fileName = 'avatar.jpg';
+      const file = new File([croppedBlob], fileName, { type: 'image/jpeg' });
+
+      formData.append('avatar', file);
+
       await api.post('/api/profile/avatar', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       await fetchAvatar();
       if (onUpload) onUpload();
+      setCropOpen(false);
     } catch (err) {
-      console.error("Erreur lors de l'upload de l’avatar :", err);
+      console.error("Erreur lors de l'envoi de l'avatar :", err);
     }
   };
 
@@ -80,11 +112,8 @@ export default function AvatarUploader({ onUpload }) {
 
   useEffect(() => {
     fetchAvatar();
-
     return () => {
-      if (blobUrl) {
-        URL.revokeObjectURL(blobUrl);
-      }
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
   }, []);
 
@@ -134,25 +163,50 @@ export default function AvatarUploader({ onUpload }) {
         </Button>
       )}
 
-      <Dialog
-        open={confirmOpen}
-        disableRestoreFocus
-        onClose={() => setConfirmOpen(false)}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
-      >
-        <DialogTitle id="confirm-dialog-title">Confirmer la suppression</DialogTitle>
+      {/* Delete dialog*/}
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Confirmer la suppression</DialogTitle>
         <DialogContent>
-          <DialogContentText id="confirm-dialog-description">
-            Êtes-vous sûr de vouloir supprimer votre avatar ?
-          </DialogContentText>
+          <DialogContentText>Êtes-vous sûr de vouloir supprimer votre avatar ?</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} color="primary">
-            Annuler
-          </Button>
+          <Button onClick={() => setConfirmOpen(false)}>Annuler</Button>
           <Button onClick={handleDeleteAvatar} color="error" autoFocus>
             Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Crop dialog */}
+      <Dialog open={cropOpen} maxWidth="sm" fullWidth onClose={() => setCropOpen(false)}>
+        <DialogTitle>Recadrer l’image</DialogTitle>
+        <DialogContent sx={{ position: 'relative', height: 400 }}>
+          <Cropper
+            image={selectedImage}
+            crop={crop}
+            zoom={zoom}
+            aspect={1}
+            cropShape="round"
+            showGrid={false}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+          />
+        </DialogContent>
+        <Box px={3} pt={1}>
+          <Slider
+            value={zoom}
+            min={1}
+            max={3}
+            step={0.1}
+            onChange={(e, z) => setZoom(z)}
+            aria-label="Zoom"
+          />
+        </Box>
+        <DialogActions>
+          <Button onClick={() => setCropOpen(false)}>Annuler</Button>
+          <Button onClick={handleCropSave} variant="contained">
+            Enregistrer
           </Button>
         </DialogActions>
       </Dialog>
