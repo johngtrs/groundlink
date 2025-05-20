@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -58,6 +60,18 @@ class ProfileController extends Controller
         return response()->json($user->fresh()->load('typeable'));
     }
 
+    public function getAvatar(Request $request)
+    {
+        $user = $request->user();
+        $path = $user->typeable->avatar;
+
+        if (!$path || !Storage::disk('private')->exists($path)) {
+            return response()->file(public_path('images/default-avatar.jpg'));
+        }
+
+        return response()->file(Storage::disk('private')->path($path));
+    }
+
     public function updateAvatar(Request $request): JsonResponse
     {
         $request->validate([
@@ -65,14 +79,11 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-        $path = $request->file('avatar')->store('avatars', 'public');
+        $path = $request->file('avatar')->store('avatars', 'private');
 
-        $typeable = $user->typeable;
-        $typeable->avatar = $path;
-        $typeable->save();
+        $user->typeable->avatar = $path;
+        $user->typeable->save();
 
-        return response()->json([
-            'avatar' => asset('storage/' . $path),
-        ]);
+        return response()->json(['message' => 'Avatar updated']);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\InterceptOptionsRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

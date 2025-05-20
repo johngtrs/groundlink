@@ -35,7 +35,7 @@ export default function ProfileView() {
 
         <Stack spacing={2} mt={2}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <AvatarUploader avatarUrl={typeable?.avatar} />
+            <AvatarUploader />
           </Box>
 
           <Typography>

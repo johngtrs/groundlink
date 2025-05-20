@@ -1,11 +1,25 @@
-import React, { useRef, useState } from 'react';
-import { Avatar, Box, IconButton } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, Box, IconButton, Skeleton } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import api from '../api/axios';
 
-export default function AvatarUploader({ avatarUrl, onUpload }) {
+export default function AvatarUploader({ onUpload }) {
   const inputRef = useRef(null);
-  const [preview, setPreview] = useState(avatarUrl);
+  const [preview, setPreview] = useState(null);
+
+  const fetchAvatar = async () => {
+    try {
+      const response = await api.get(`/api/profile/avatar?v=${Date.now()}`, {
+        responseType: 'blob',
+      });
+
+      const blobUrl = URL.createObjectURL(response.data);
+      setPreview(blobUrl);
+    } catch (err) {
+      console.error('Erreur lors de la récupération de l’avatar :', err);
+      setPreview('/images/default-avatar.png');
+    }
+  };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -15,16 +29,20 @@ export default function AvatarUploader({ avatarUrl, onUpload }) {
     formData.append('avatar', file);
 
     try {
-      const { data } = await api.post('/api/profile/avatar', formData, {
+      await api.post('/api/profile/avatar', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      setPreview(data.avatar);
-      if (onUpload) onUpload(data.avatar);
+      await fetchAvatar();
+      if (onUpload) onUpload();
     } catch (err) {
-      console.error('Erreur de l’upload :', err);
+      console.error("Erreur lors de l'upload de l’avatar :", err);
     }
   };
+
+  useEffect(() => {
+    fetchAvatar();
+  }, []);
 
   return (
     <Box
@@ -36,7 +54,12 @@ export default function AvatarUploader({ avatarUrl, onUpload }) {
         '&:hover .overlay': { opacity: 1 },
       }}
     >
-      <Avatar src={preview} sx={{ width: 150, height: 150 }} />
+      {!preview ? (
+        <Skeleton variant="circular" width={150} height={150} />
+      ) : (
+        <Avatar src={preview} alt="Avatar" sx={{ width: 150, height: 150 }} />
+      )}
+
       <Box
         className="overlay"
         sx={{
