@@ -66,7 +66,7 @@ class ProfileController extends Controller
         $path = $user->typeable->avatar;
 
         if (!$path || !Storage::disk('private')->exists($path)) {
-            return response()->file(public_path('images/default-avatar.jpg'));
+            return response('', 204);
         }
 
         return response()->file(Storage::disk('private')->path($path));
@@ -85,5 +85,20 @@ class ProfileController extends Controller
         $user->typeable->save();
 
         return response()->json(['message' => 'Avatar updated']);
+    }
+
+    public function deleteAvatar(Request $request)
+    {
+        $user = $request->user();
+        $typeable = $user->typeable;
+
+        if ($typeable->avatar && Storage::disk('private')->exists($typeable->avatar)) {
+            Storage::disk('private')->delete($typeable->avatar);
+        }
+
+        $typeable->avatar = null;
+        $typeable->save();
+
+        return response()->json(['message' => 'Avatar deleted']);
     }
 }

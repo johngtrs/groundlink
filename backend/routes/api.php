@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile/avatar', [ProfileController::class, 'getAvatar']);
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
+
 
 
     Route::get('/genres', [GenreController::class, 'index']);
