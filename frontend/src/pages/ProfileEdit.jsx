@@ -22,8 +22,15 @@ export default function ProfileEdit() {
       genres: [],
       spotify: '',
       website: '',
-      address: '',
-      city: '',
+      address: {
+        formatted_address: '',
+        postal_code: '',
+        city: '',
+        country: '',
+        lat: null,
+        lng: null,
+        place_id: '',
+      },
       capacity: '',
       description: '',
     },
@@ -41,8 +48,17 @@ export default function ProfileEdit() {
           genres: data?.typeable?.genres?.map((g) => g.id) ?? [],
           spotify: data?.typeable?.spotify ?? '',
           website: data?.typeable?.website ?? '',
-          address: data?.typeable?.address ?? '',
-          city: data?.typeable?.city ?? '',
+          address: {
+            formatted_address: data?.typeable?.address ?? '',
+            city: data?.typeable?.city ?? '',
+            postal_code: data?.typeable?.postal_code ?? '',
+            country: data?.typeable?.country ?? '',
+            street_number: data?.typeable?.street_number ?? '',
+            route: data?.typeable?.route ?? '',
+            lat: data?.typeable?.lat ?? null,
+            lng: data?.typeable?.lng ?? null,
+            place_id: data?.typeable?.place_id ?? '',
+          },
           capacity: data?.typeable?.capacity ?? '',
           description: data?.typeable?.description ?? '',
         });
@@ -58,7 +74,20 @@ export default function ProfileEdit() {
 
   const onSubmit = async (data) => {
     try {
-      await api.put('/api/profile', data);
+      const { address, ...rest } = data;
+
+      const payload = {
+        ...rest,
+        address: address ? `${address.street_number ?? ''} ${address.route ?? ''}`.trim() : null,
+        city: address?.city ?? null,
+        postal_code: address?.postal_code ?? null,
+        country: address?.country ?? null,
+        lat: address?.lat ?? null,
+        lng: address?.lng ?? null,
+        place_id: address?.place_id ?? null,
+      };
+
+      await api.put('/api/profile', payload);
       navigate('/profile');
     } catch (error) {
       console.error('Erreur lors de la mise à jour du profil :', error);
@@ -121,7 +150,6 @@ export default function ProfileEdit() {
                     )}
                   />
 
-                  <FormField name="city" label="Ville" />
                   <FormField name="capacity" label="Capacité (nombre de personnes)" type="number" />
                   <FormField name="website" label="Site web" />
                 </>

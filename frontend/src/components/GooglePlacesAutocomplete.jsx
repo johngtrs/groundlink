@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Grid, Paper, TextField, Typography, Autocomplete, useTheme } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PropTypes from 'prop-types';
@@ -73,7 +73,7 @@ const fetchSuggestions = debounce((input, sessionToken, callback) => {
 }, 400);
 
 export default function GooglePlacesAutocomplete({ label, value, onChange }) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value?.formatted_address || '');
   const [options, setOptions] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -86,23 +86,22 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
     }
   }, []);
 
-  useLayoutEffect(() => {
-    if (!loaded) return;
-    const sessionToken = new window.google.maps.places.AutocompleteSessionToken();
-
-    if (inputValue === '') {
-      setOptions(value ? [value] : []);
+  useEffect(() => {
+    if (!loaded || inputValue === '') {
+      setOptions([]);
       return;
     }
 
+    const sessionToken = new window.google.maps.places.AutocompleteSessionToken();
     fetchSuggestions(inputValue, sessionToken, (predictions = []) => {
       const mapped = predictions.map((prediction) => ({
         description: prediction.description,
         structured_formatting: prediction.structured_formatting,
+        place_id: prediction.place_id,
       }));
       setOptions(mapped);
     });
-  }, [inputValue, value, loaded]);
+  }, [inputValue, loaded]);
 
   return (
     <Autocomplete
@@ -112,17 +111,65 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
       filterSelectedOptions
       filterOptions={(x) => x}
       options={options}
-      getOptionLabel={(option) => option.description || ''}
-      value={value}
-      onChange={(e, newValue) => onChange(newValue)}
-      onInputChange={(e, newInputValue) => setInputValue(newInputValue)}
+      getOptionLabel={(option) =>
+        typeof option === 'string' ? option : option.formatted_address || option.description || ''
+      }
+      isOptionEqualToValue={(option, value) =>
+        option?.place_id && value?.place_id
+          ? option.place_id === value.place_id
+          : option?.formatted_address === value?.formatted_address
+      }
+      value={value?.formatted_address ? value : null}
+      inputValue={inputValue}
+      onInputChange={(e, newInputValue, reason) => {
+        if (reason === 'input') {
+          setInputValue(newInputValue);
+          if (newInputValue === '') onChange(null);
+        }
+      }}
+      onChange={(e, newValue) => {
+        if (!newValue?.place_id) {
+          onChange(null);
+          setInputValue('');
+          return;
+        }
+
+        const service = new window.google.maps.places.PlacesService(document.createElement('div'));
+
+        service.getDetails(
+          {
+            placeId: newValue.place_id,
+            fields: ['address_components', 'geometry', 'formatted_address'],
+          },
+          (place, status) => {
+            if (status !== window.google.maps.places.PlacesServiceStatus.OK || !place) return;
+
+            const get = (type) =>
+              place.address_components.find((c) => c.types.includes(type))?.long_name || '';
+
+            const parsed = {
+              formatted_address: place.formatted_address,
+              street_number: get('street_number'),
+              route: get('route'),
+              city: get('locality'),
+              postal_code: get('postal_code'),
+              country: get('country'),
+              lat: place.geometry?.location?.lat() ?? null,
+              lng: place.geometry?.location?.lng() ?? null,
+              place_id: newValue.place_id,
+            };
+
+            setInputValue(place.formatted_address);
+            onChange(parsed);
+          }
+        );
+      }}
       noOptionsText="Aucun lieu trouvé"
       slotProps={{ paper: { component: CustomPaper } }}
       renderInput={(params) => <TextField {...params} label={label} fullWidth />}
       renderOption={(props, option) => {
         const matches = option.structured_formatting.main_text_matched_substrings;
         const parts = highlightMatch(option.structured_formatting.main_text, matches);
-
         const { key, ...rest } = props;
 
         return (
@@ -136,18 +183,16 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
                   <Box
                     key={index}
                     component="span"
-                    sx={{
-                      fontWeight: part.highlight ? 'fontWeightBold' : 'fontWeightRegular',
-                    }}
+                    sx={{ fontWeight: part.highlight ? 'fontWeightBold' : 'fontWeightRegular' }}
                   >
                     {part.text}
                   </Box>
                 ))}
-                {option.structured_formatting.secondary_text ? (
+                {option.structured_formatting.secondary_text && (
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {option.structured_formatting.secondary_text}
                   </Typography>
-                ) : null}
+                )}
               </Grid>
             </Grid>
           </li>
