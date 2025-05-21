@@ -30,6 +30,6 @@ export const profileSchema = yup.object({
   capacity: yup
     .number()
     .nullable()
-    .typeError('La capacité doit être un nombre.')
+    .transform((value, originalValue) => (originalValue === '' ? null : Number(value)))
     .min(0, 'La capacité ne peut pas être négative.'),
 });
