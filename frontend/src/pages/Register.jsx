@@ -15,14 +15,14 @@ import {
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, useNavigate } from 'react-router-dom';
-import FormField from './components/FormField';
-import api from './api/axios';
-import { useAuth } from './context/useAuth';
-import { registerSchema } from './validations/registerSchema';
+import FormField from '../components/FormField';
+import { useAuth } from '../context/useAuth';
+import { registerSchema } from '../validations/registerSchema';
+import BackToHomeButton from '../components/BackToHomeButton';
 
 export default function Register() {
   const [error, setError] = useState(null);
-  const { setAuthenticatedUser } = useAuth();
+  const { register, loading } = useAuth();
   const navigate = useNavigate();
 
   const methods = useForm({
@@ -54,10 +54,7 @@ export default function Register() {
     };
 
     try {
-      await api.get('/sanctum/csrf-cookie');
-      const response = await api.post('api/register', payload);
-
-      setAuthenticatedUser(response.data.user);
+      await register(payload);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || "L'inscription a échoué");
@@ -70,6 +67,7 @@ export default function Register() {
         elevation={6}
         sx={{ p: 4, bgcolor: 'background.paper', borderRadius: 1, width: '100%', maxWidth: 500 }}
       >
+        <BackToHomeButton />
         <Typography
           variant="h4"
           gutterBottom
@@ -117,7 +115,13 @@ export default function Register() {
               <FormField name="password" label="Mot de passe" type="password" />
               <FormField name="confirmPassword" label="Confirmer le mot de passe" type="password" />
 
-              <Button type="submit" variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
+              <Button
+                loading={loading}
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ fontWeight: 'bold' }}
+              >
                 S'inscrire
               </Button>
 

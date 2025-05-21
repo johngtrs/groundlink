@@ -18,6 +18,7 @@ export default function FormField({ name, label, type = 'text', ...rest }) {
     <Controller
       name={name}
       control={control}
+      defaultValue=""
       render={({ field }) => (
         <TextField
           {...field}

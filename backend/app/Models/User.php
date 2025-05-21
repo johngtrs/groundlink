@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +12,6 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens;
     use HasFactory;
     use HasRoles;
@@ -53,6 +52,24 @@ class User extends Authenticatable
     }
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ["type"];
+
+    public function type(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => match ($this->typeable_type) {
+                'App\\Models\\Band'  => 'band',
+                'App\\Models\\Venue' => 'venue',
+                default              => null,
+            }
+        );
+    }
+
+    /**
      * Get the polymorphic relation to the user type (Band, Venue).
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -75,32 +92,27 @@ class User extends Authenticatable
      */
     public static function registerWithType(array $attributes): ?User
     {
-        // Check if a user with this email already exists
         if (User::where('email', $attributes['email'])->exists()) {
             return null;
         }
 
         $type = $attributes['type'];
 
-        // Only accept known types
         if (!in_array($type, ['band', 'venue'], true)) {
             return null;
         }
 
-        // Create the related polymorphic model
         $typeModel = match ($type) {
             'band'  => Band::create(['name' => $attributes['name']]),
             'venue' => Venue::create(['name' => $attributes['name']]),
         };
 
-        // Create the user via the polymorphic relation
         $user = $typeModel->user()->create([
             'name'     => $attributes['name'],
             'email'    => $attributes['email'],
             'password' => Hash::make($attributes['password']),
         ]);
 
-        // Assign role based on type
         $user->assignRole($type);
 
         return $user;

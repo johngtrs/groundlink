@@ -8,10 +8,13 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl gd
 
 # Install Composer from the official Composer image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -29,6 +32,9 @@ RUN chown -R appuser:appgroup /app
 
 # Copy application source code
 COPY . .
+
+# Install PHP dependencies via Composer
+RUN composer install --no-dev --optimize-autoloader
 
 # Copy and make the entrypoint script executable
 COPY docker/entrypoint.sh /docker/entrypoint.sh

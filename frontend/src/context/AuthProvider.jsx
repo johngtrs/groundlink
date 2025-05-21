@@ -4,7 +4,8 @@ import AuthContext from './AuthContext';
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true); // Avoid home clipping
 
   const fetchUser = async () => {
     try {
@@ -14,13 +15,20 @@ export default function AuthProvider({ children }) {
       setUser(null);
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
   const login = async (credentials) => {
-    await api.get('/sanctum/csrf-cookie');
-    await api.post('/api/login', credentials);
-    await fetchUser();
+    setLoading(true);
+
+    try {
+      await api.get('/sanctum/csrf-cookie');
+      await api.post('/api/login', credentials);
+      await fetchUser();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {
@@ -28,9 +36,16 @@ export default function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const setAuthenticatedUser = (userData) => {
-    setUser(userData);
-    setLoading(false);
+  const register = async (payload) => {
+    setLoading(true);
+
+    try {
+      await api.get('/sanctum/csrf-cookie');
+      const response = await api.post('api/register', payload);
+      setUser(response.data.user);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -38,7 +53,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, setAuthenticatedUser }}>
+    <AuthContext.Provider value={{ user, login, logout, register, loading, initialLoading }}>
       {children}
     </AuthContext.Provider>
   );

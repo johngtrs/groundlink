@@ -1,0 +1,27 @@
+# Dépendances
+/node_modules
+
+# Builds
+/dist
+/build
+
+# Environnements
+.env
+.env.*
+*.env
+
+# Fichiers système et IDE
+.DS_Store
+.vscode
+.idea
+
+# Configs locales
+.prettier*
+.eslint*
+
+# Git
+.git
+.gitignore
+
+# Autres fichiers inutiles dans l'image
+README.md
