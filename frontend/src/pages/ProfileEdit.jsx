@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Typography, Stack, Paper, Divider, CircularProgress } from '@mui/material';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { useAuth } from '../context/useAuth';
 import FormField from '../components/FormField';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import api from '../api/axios';
 import SelectSearchField from '../components/SelectSearchField';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { profileSchema } from '../validations/profileSchema';
+import GooglePlacesAutocomplete from '../components/GooglePlacesAutocomplete';
 
 export default function ProfileEdit() {
   const { user } = useAuth();
@@ -108,7 +109,18 @@ export default function ProfileEdit() {
 
               {user?.type === 'venue' && (
                 <>
-                  <FormField name="address" label="Adresse" />
+                  <Controller
+                    name="address"
+                    control={methods.control}
+                    render={({ field }) => (
+                      <GooglePlacesAutocomplete
+                        label="Adresse"
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+
                   <FormField name="city" label="Ville" />
                   <FormField name="capacity" label="Capacité (nombre de personnes)" type="number" />
                   <FormField name="website" label="Site web" />
