@@ -4,7 +4,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PropTypes from 'prop-types';
 import { debounce } from '@mui/material/utils';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBXyFCMvedY7fKxjckgDldytLg2KHe9I_w';
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 function loadGoogleScript(callbackName) {
   if (document.querySelector(`script[src*="maps.googleapis.com"]`)) return;
