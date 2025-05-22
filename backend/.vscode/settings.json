@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "[php]": {
+      "editor.defaultFormatter": "junstyle.php-cs-fixer"
+    },
+    "[blade]": {
+      "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+    }
+  }
