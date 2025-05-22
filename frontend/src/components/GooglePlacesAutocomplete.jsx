@@ -93,12 +93,21 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
     }
 
     const sessionToken = new window.google.maps.places.AutocompleteSessionToken();
-    fetchSuggestions(inputValue, sessionToken, (predictions = []) => {
+    fetchSuggestions(inputValue, sessionToken, (predictions, status) => {
+      if (
+        status !== window.google.maps.places.PlacesServiceStatus.OK ||
+        !Array.isArray(predictions)
+      ) {
+        setOptions([]);
+        return;
+      }
+
       const mapped = predictions.map((prediction) => ({
         description: prediction.description,
         structured_formatting: prediction.structured_formatting,
         place_id: prediction.place_id,
       }));
+
       setOptions(mapped);
     });
   }, [inputValue, loaded]);
@@ -158,7 +167,6 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
               lng: place.geometry?.location?.lng() ?? null,
               place_id: newValue.place_id,
             };
-            console.log(parsed);
 
             setInputValue(place.formatted_address);
             onChange(parsed);
@@ -167,7 +175,14 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
       }}
       noOptionsText="Aucun lieu trouvé"
       slotProps={{ paper: { component: CustomPaper } }}
-      renderInput={(params) => <TextField {...params} label={label} fullWidth />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          helperText="📍 Vous devez choisir une adresse dans la liste pour la valider."
+          fullWidth
+        />
+      )}
       renderOption={(props, option) => {
         const matches = option.structured_formatting.main_text_matched_substrings;
         const parts = highlightMatch(option.structured_formatting.main_text, matches);

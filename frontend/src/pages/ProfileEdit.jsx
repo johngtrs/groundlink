@@ -90,9 +90,6 @@ export default function ProfileEdit() {
         lng: address?.lng ?? null,
         place_id: address?.place_id ?? null,
       };
-      console.log(payload);
-
-      // return;
 
       await api.put('/api/profile', payload);
       navigate('/profile');
