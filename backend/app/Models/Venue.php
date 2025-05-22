@@ -13,18 +13,19 @@ class Venue extends Model
         'name',
         'description',
         'capacity',
+        'website',
+        'formatted_address',
         'address',
-        'city_id',
-        'website'
+        'city',
+        'postal_code',
+        'country',
+        'lat',
+        'lng',
+        'place_id',
     ];
 
     public function user()
     {
         return $this->morphOne(User::class, 'typeable');
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
     }
 }

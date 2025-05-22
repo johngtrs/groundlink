@@ -158,6 +158,7 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
               lng: place.geometry?.location?.lng() ?? null,
               place_id: newValue.place_id,
             };
+            console.log(parsed);
 
             setInputValue(place.formatted_address);
             onChange(parsed);

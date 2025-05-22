@@ -59,10 +59,7 @@ export default function ProfileView() {
           {type === 'venue' && (
             <>
               <Typography>
-                <strong>Adresse :</strong> {typeable?.address ?? ''}
-              </Typography>
-              <Typography>
-                <strong>Ville :</strong> {typeable?.city ?? ''}
+                <strong>Adresse :</strong> {typeable?.formatted_address ?? ''}
               </Typography>
               <Typography>
                 <strong>Capacité :</strong> {typeable?.capacity ?? ''}

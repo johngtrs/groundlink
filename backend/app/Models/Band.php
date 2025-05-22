@@ -14,7 +14,6 @@ class Band extends Model
         'description',
         'spotify',
         'website',
-        'city_id'
     ];
 
     protected $with = ['genres'];
@@ -22,11 +21,6 @@ class Band extends Model
     public function user()
     {
         return $this->morphOne(User::class, 'typeable');
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
     }
 
     public function genres()

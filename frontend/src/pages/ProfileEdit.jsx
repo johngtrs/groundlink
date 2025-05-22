@@ -24,6 +24,7 @@ export default function ProfileEdit() {
       website: '',
       address: {
         formatted_address: '',
+        address: '',
         postal_code: '',
         city: '',
         country: '',
@@ -49,12 +50,11 @@ export default function ProfileEdit() {
           spotify: data?.typeable?.spotify ?? '',
           website: data?.typeable?.website ?? '',
           address: {
-            formatted_address: data?.typeable?.address ?? '',
+            formatted_address: data?.typeable?.formatted_address ?? '',
+            address: data?.typeable?.address ?? '',
             city: data?.typeable?.city ?? '',
             postal_code: data?.typeable?.postal_code ?? '',
             country: data?.typeable?.country ?? '',
-            street_number: data?.typeable?.street_number ?? '',
-            route: data?.typeable?.route ?? '',
             lat: data?.typeable?.lat ?? null,
             lng: data?.typeable?.lng ?? null,
             place_id: data?.typeable?.place_id ?? '',
@@ -75,10 +75,14 @@ export default function ProfileEdit() {
   const onSubmit = async (data) => {
     try {
       const { address, ...rest } = data;
+      const hasGoogleParts = address?.street_number || address?.route;
 
       const payload = {
         ...rest,
-        address: address ? `${address.street_number ?? ''} ${address.route ?? ''}`.trim() : null,
+        formatted_address: address?.formatted_address ?? null,
+        address: hasGoogleParts
+          ? `${address.street_number ?? ''} ${address.route ?? ''}`.trim()
+          : (address?.address ?? null),
         city: address?.city ?? null,
         postal_code: address?.postal_code ?? null,
         country: address?.country ?? null,
@@ -86,6 +90,9 @@ export default function ProfileEdit() {
         lng: address?.lng ?? null,
         place_id: address?.place_id ?? null,
       };
+      console.log(payload);
+
+      // return;
 
       await api.put('/api/profile', payload);
       navigate('/profile');
