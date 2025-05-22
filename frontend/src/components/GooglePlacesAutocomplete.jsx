@@ -163,6 +163,8 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
               city: get('locality'),
               postal_code: get('postal_code'),
               country: get('country'),
+              region: get('administrative_area_level_1'),
+              department: get('administrative_area_level_2'),
               lat: place.geometry?.location?.lat() ?? null,
               lng: place.geometry?.location?.lng() ?? null,
               place_id: newValue.place_id,

@@ -39,16 +39,18 @@ class ProfileController extends Controller
             'genres'          => ['nullable', 'array'],
             'spotify'         => ['nullable', 'url', 'max:2048'],
             // Venue
-            'website'               => ['nullable', 'url', 'max:2048'],
-            'capacity'              => ['nullable', 'integer', 'min:0'],
-            'formatted_address'     => ['nullable', 'string', 'max:255'],
-            'address'               => ['nullable', 'string', 'max:255'],
-            'city'                  => ['nullable', 'string', 'max:255'],
-            'postal_code'           => ['nullable', 'string', 'max:20'],
-            'country'               => ['nullable', 'string', 'max:100'],
-            'lat'                   => ['nullable', 'numeric'],
-            'lng'                   => ['nullable', 'numeric'],
-            'place_id'              => ['nullable', 'string', 'max:255'],
+            'website'                  => ['nullable', 'url', 'max:2048'],
+            'capacity'                 => ['nullable', 'integer', 'min:0'],
+            'formatted_address'        => ['nullable', 'string', 'max:255'],
+            'address'                  => ['nullable', 'string', 'max:255'],
+            'city'                     => ['nullable', 'string', 'max:255'],
+            'postal_code'              => ['nullable', 'string', 'max:20'],
+            'country'                  => ['nullable', 'string', 'max:100'],
+            'region'                   => ['nullable', 'string', 'max:255'],
+            'department'               => ['nullable', 'string', 'max:255'],
+            'lat'                      => ['nullable', 'numeric'],
+            'lng'                      => ['nullable', 'numeric'],
+            'place_id'                 => ['nullable', 'string', 'max:255'],
         ]);
 
         $user->update(['name' => $validated['name']]);
