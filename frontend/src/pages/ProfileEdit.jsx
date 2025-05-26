@@ -142,7 +142,6 @@ export default function ProfileEdit() {
                     disableCloseOnSelect
                   />
                   <FormField name="spotify" label="Lien Spotify" />
-                  <FormField name="website" label="Site web" />
                 </>
               )}
 
@@ -161,10 +160,10 @@ export default function ProfileEdit() {
                   />
 
                   <FormField name="capacity" label="Capacité (nombre de personnes)" type="number" />
-                  <FormField name="website" label="Site web" />
                 </>
               )}
 
+              <FormField name="website" label="Site web" />
               <FormField name="description" label="Description" multiline minRows={4} />
 
               <Stack direction="row" spacing={2} justifyContent="flex-end" mt={2}>

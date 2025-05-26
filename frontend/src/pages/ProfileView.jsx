@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import BackToHomeButton from '../components/BackToHomeButton';
 import AvatarUploader from '../components/AvatarUploader';
+import ExternalLink from '../components/ExternalLink';
 
 export default function ProfileView() {
   const [profile, setProfile] = useState(null);
@@ -48,10 +49,7 @@ export default function ProfileView() {
                 <strong>Genres :</strong> {typeable.genres.map((genre) => genre.name).join(', ')}
               </Typography>
               <Typography>
-                <strong>Spotify :</strong> {typeable?.spotify ?? ''}
-              </Typography>
-              <Typography>
-                <strong>Site web :</strong> {typeable?.website ?? ''}
+                <strong>Spotify :</strong> <ExternalLink url={typeable?.spotify} />
               </Typography>
             </>
           )}
@@ -64,12 +62,12 @@ export default function ProfileView() {
               <Typography>
                 <strong>Capacité :</strong> {typeable?.capacity ?? ''}
               </Typography>
-              <Typography>
-                <strong>Site web :</strong> {typeable?.website ?? ''}
-              </Typography>
             </>
           )}
 
+          <Typography>
+            <strong>Site web :</strong> <ExternalLink url={typeable?.website} />
+          </Typography>
           <Typography>
             <strong>Description :</strong> {typeable?.description ?? ''}
           </Typography>
