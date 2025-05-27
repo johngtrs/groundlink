@@ -129,6 +129,18 @@ export default function ProfileEdit() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack spacing={2}>
               <FormField name="name" label="Nom" />
+              <Controller
+                name="address"
+                control={methods.control}
+                render={({ field }) => (
+                  <GooglePlacesAutocomplete
+                    label={user?.type === 'band' ? 'Ville' : 'Adresse'}
+                    value={field.value}
+                    onChange={field.onChange}
+                    limit={user?.type === 'band' ? 'city' : 'full'}
+                  />
+                )}
+              />
 
               {user?.type === 'band' && (
                 <>
@@ -147,18 +159,6 @@ export default function ProfileEdit() {
 
               {user?.type === 'venue' && (
                 <>
-                  <Controller
-                    name="address"
-                    control={methods.control}
-                    render={({ field }) => (
-                      <GooglePlacesAutocomplete
-                        label="Adresse"
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                  />
-
                   <FormField name="capacity" label="Capacité (nombre de personnes)" type="number" />
                 </>
               )}

@@ -14,6 +14,15 @@ class Band extends Model
         'description',
         'spotify',
         'website',
+        'formatted_address',
+        'city',
+        'postal_code',
+        'country',
+        'region',
+        'department',
+        'lat',
+        'lng',
+        'place_id',
     ];
 
     protected $with = ['genres'];

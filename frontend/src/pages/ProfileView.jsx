@@ -42,6 +42,9 @@ export default function ProfileView() {
           <Typography>
             <strong>Nom :</strong> {name}
           </Typography>
+          <Typography>
+            <strong>Adresse :</strong> {typeable?.formatted_address ?? ''}
+          </Typography>
 
           {type === 'band' && (
             <>
@@ -56,9 +59,6 @@ export default function ProfileView() {
 
           {type === 'venue' && (
             <>
-              <Typography>
-                <strong>Adresse :</strong> {typeable?.formatted_address ?? ''}
-              </Typography>
               <Typography>
                 <strong>Capacité :</strong> {typeable?.capacity ?? ''}
               </Typography>

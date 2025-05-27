@@ -67,12 +67,21 @@ CustomPaper.propTypes = {
   children: PropTypes.node,
 };
 
-const fetchSuggestions = debounce((input, sessionToken, callback) => {
+const fetchSuggestions = debounce((input, sessionToken, types, callback) => {
   const service = new window.google.maps.places.AutocompleteService();
-  service.getPlacePredictions({ input, sessionToken }, callback);
+
+  service.getPlacePredictions(
+    {
+      input,
+      sessionToken,
+      types,
+      componentRestrictions: { country: 'fr' },
+    },
+    callback
+  );
 }, 400);
 
-export default function GooglePlacesAutocomplete({ label, value, onChange }) {
+export default function GooglePlacesAutocomplete({ label, value, onChange, limit = 'full' }) {
   const [inputValue, setInputValue] = useState(value?.formatted_address || '');
   const [options, setOptions] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -93,7 +102,9 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
     }
 
     const sessionToken = new window.google.maps.places.AutocompleteSessionToken();
-    fetchSuggestions(inputValue, sessionToken, (predictions, status) => {
+    const types = limit === 'city' ? ['postal_code', 'locality'] : [];
+
+    fetchSuggestions(inputValue, sessionToken, types, (predictions, status) => {
       if (
         status !== window.google.maps.places.PlacesServiceStatus.OK ||
         !Array.isArray(predictions)
@@ -110,7 +121,7 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
 
       setOptions(mapped);
     });
-  }, [inputValue, loaded]);
+  }, [inputValue, loaded, limit]);
 
   return (
     <Autocomplete
@@ -181,7 +192,7 @@ export default function GooglePlacesAutocomplete({ label, value, onChange }) {
         <TextField
           {...params}
           label={label}
-          helperText="📍 Vous devez choisir une adresse dans la liste pour la valider."
+          helperText="📍 Veuillez sélectionner le résultat dans la liste pour le valider."
           fullWidth
         />
       )}
