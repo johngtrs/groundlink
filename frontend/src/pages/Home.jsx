@@ -1,91 +1,168 @@
 import { Box, Button, Typography, Stack, Paper } from '@mui/material';
 import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
+import { DataGrid } from '@mui/x-data-grid';
+import { frFR } from '@mui/x-data-grid/locales';
+import { useEffect, useState } from 'react';
+import api from '../api/axios';
 
 export default function Home() {
   const { user, logout, initialLoading } = useAuth();
+  const [bands, setBands] = useState([]);
+  const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Avoid clipping
-  if (initialLoading) {
-    return null;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [bandsRes, venuesRes] = await Promise.all([
+          api.get('/api/bands'),
+          api.get('/api/venues'),
+        ]);
+        setBands(bandsRes.data);
+        setVenues(venuesRes.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des données :', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (initialLoading) return null;
+
+  const bandColumns = [
+    { field: 'name', headerName: 'Nom', flex: 1 },
+    {
+      field: 'genres',
+      headerName: 'Genres',
+      flex: 2,
+      renderCell: (params) => params.row?.genres?.map((g) => g.name).join(', ') ?? '',
+    },
+    { field: 'postal_code', headerName: 'Code Postal', flex: 1 },
+    { field: 'city', headerName: 'Ville', flex: 1 },
+    { field: 'department', headerName: 'Département', flex: 1 },
+    { field: 'region', headerName: 'Région', flex: 1 },
+    { field: 'country', headerName: 'Pays', flex: 1 },
+  ];
+
+  const venueColumns = [
+    { field: 'name', headerName: 'Nom', flex: 2 },
+    { field: 'capacity', headerName: 'Capacité', flex: 1 },
+    { field: 'postal_code', headerName: 'Code Postal', flex: 2 },
+    { field: 'city', headerName: 'Ville', flex: 2 },
+    { field: 'department', headerName: 'Département', flex: 2 },
+    { field: 'region', headerName: 'Région', flex: 2 },
+    { field: 'country', headerName: 'Pays', flex: 2 },
+  ];
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        mt: 10,
-      }}
-    >
-      <Paper elevation={6} sx={{ p: 4, borderRadius: 2 }}>
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{ fontWeight: 'bold', textAlign: 'center', textTransform: 'uppercase' }}
-        >
-          Ground Link
-        </Typography>
+    <Box sx={{ px: 4, py: 6 }}>
+      <Typography variant="h3" textAlign="center" fontWeight="bold" gutterBottom>
+        Ground Link
+      </Typography>
 
+      <Box textAlign="center" mb={4}>
         {user ? (
-          <Stack spacing={3} mt={3} alignItems="center">
-            <Typography variant="h6">
-              Bienvenue, <strong>{user.name}</strong>
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Vous êtes connecté à votre espace Ground Link.
-            </Typography>
-
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Button
-                variant="contained"
-                component={Link}
-                to="/profile"
-                sx={{ fontWeight: 'bold', px: 4 }}
-              >
-                Voir mon profil
-              </Button>
-
-              <Typography variant="body2" color="text.secondary">
-                ou
-              </Typography>
-
-              <Button variant="outlined" onClick={logout} sx={{ fontWeight: 'bold', mt: 2 }}>
-                Se déconnecter
-              </Button>
-            </Stack>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button variant="contained" component={Link} to="/profile">
+              Voir mon profil
+            </Button>
+            <Button variant="outlined" onClick={logout}>
+              Se déconnecter
+            </Button>
           </Stack>
         ) : (
-          <Stack spacing={3} mt={3} alignItems="center">
-            <Typography variant="body1" color="text.secondary" textAlign="center">
-              Connectez-vous pour accéder à votre espace personnel.
-            </Typography>
-
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Button
-                variant="contained"
-                component={Link}
-                to="/login"
-                sx={{ fontWeight: 'bold', px: 4 }}
-              >
-                Se connecter
-              </Button>
-
-              <Typography variant="body2" color="text.secondary">
-                ou
-              </Typography>
-
-              <Button
-                variant="outlined"
-                component={Link}
-                to="/register"
-                sx={{ fontWeight: 'bold', px: 4 }}
-              >
-                Créer un compte
-              </Button>
-            </Stack>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button variant="contained" component={Link} to="/login">
+              Se connecter
+            </Button>
+            <Button variant="outlined" component={Link} to="/register">
+              Créer un compte
+            </Button>
           </Stack>
         )}
+      </Box>
+
+      <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Groupes
+        </Typography>
+        <DataGrid
+          rows={bands}
+          columns={bandColumns}
+          loading={loading}
+          density="comfortable"
+          getRowId={(row) => row.id}
+          getRowHeight={() => 'auto'}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10, 25, 50, 100]}
+          disableRowSelectionOnClick
+          sx={{
+            width: '100%',
+            minHeight: 300,
+            '& .MuiDataGrid-cell': {
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              lineHeight: 1.4,
+              paddingTop: '8px',
+              paddingBottom: '8px',
+              fontSize: '0.9rem',
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              paddingY: '6px',
+            },
+          }}
+          localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+        />
+      </Paper>
+
+      <Paper elevation={3} sx={{ p: 2 }}>
+        <Typography variant="h5" gutterBottom>
+          Salles de concert
+        </Typography>
+        <DataGrid
+          rows={venues}
+          columns={venueColumns}
+          loading={loading}
+          density="comfortable"
+          getRowId={(row) => row.id}
+          getRowHeight={() => 'auto'}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10, 25, 50, 100]}
+          disableRowSelectionOnClick
+          sx={{
+            width: '100%',
+            minHeight: 300,
+            '& .MuiDataGrid-cell': {
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              lineHeight: 1.4,
+              paddingTop: '8px',
+              paddingBottom: '8px',
+              fontSize: '0.9rem',
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              paddingY: '6px',
+            },
+          }}
+          localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+        />
       </Paper>
     </Box>
   );
