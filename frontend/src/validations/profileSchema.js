@@ -23,9 +23,14 @@ export const profileSchema = yup.object({
     .url('Lien du site invalide.')
     .max(2048, 'L’URL est trop longue.'),
 
-  address: yup.string().nullable().max(255, 'L’adresse ne peut pas dépasser 255 caractères.'),
-
-  city: yup.string().nullable().max(255, 'La ville ne peut pas dépasser 255 caractères.'),
+  // address: yup
+  //   .object({
+  //     formatted_address: yup
+  //       .string()
+  //       .max(255, 'L’adresse ne peut pas dépasser 255 caractères.')
+  //       .nullable(),
+  //   })
+  //   .nullable(),
 
   capacity: yup
     .number()
