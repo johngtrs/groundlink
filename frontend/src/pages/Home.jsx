@@ -95,6 +95,7 @@ export default function Home() {
           rows={bands}
           columns={bandColumns}
           loading={loading}
+          showToolbar
           density="comfortable"
           getRowId={(row) => row.id}
           getRowHeight={() => 'auto'}
@@ -134,6 +135,7 @@ export default function Home() {
           rows={venues}
           columns={venueColumns}
           loading={loading}
+          showToolbar
           density="comfortable"
           getRowId={(row) => row.id}
           getRowHeight={() => 'auto'}
