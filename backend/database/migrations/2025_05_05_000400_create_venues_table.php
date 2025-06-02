@@ -18,6 +18,7 @@ return new class () extends Migration {
             $table->string('city')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
+            $table->string('country_code', 5)->nullable();
             $table->string('region')->nullable();
             $table->string('department')->nullable();
             $table->decimal('lat', 10, 7)->nullable();

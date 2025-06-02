@@ -18,6 +18,7 @@ class Band extends Model
         'city',
         'postal_code',
         'country',
+        'country_code',
         'region',
         'department',
         'lat',
