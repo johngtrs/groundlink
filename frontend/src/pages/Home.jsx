@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { frFR } from '@mui/x-data-grid/locales';
 import { useEffect, useState } from 'react';
+import { getFlagEmoji } from '../utils/flags';
 import api from '../api/axios';
 
 export default function Home() {
@@ -35,7 +36,20 @@ export default function Home() {
   if (initialLoading) return null;
 
   const bandColumns = [
-    { field: 'name', headerName: 'Nom', flex: 1 },
+    {
+      field: 'name',
+      headerName: 'Nom',
+      flex: 1,
+      renderCell: (params) => {
+        const flag = getFlagEmoji(params.row.country_code);
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <span>{flag}</span>
+            <span>{params.row.name}</span>
+          </Box>
+        );
+      },
+    },
     {
       field: 'genres',
       headerName: 'Genres',
@@ -62,7 +76,20 @@ export default function Home() {
   ];
 
   const venueColumns = [
-    { field: 'name', headerName: 'Nom', flex: 2 },
+    {
+      field: 'name',
+      headerName: 'Nom',
+      flex: 2,
+      renderCell: (params) => {
+        const flag = getFlagEmoji(params.row.country_code);
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <span>{flag}</span>
+            <span>{params.row.name}</span>
+          </Box>
+        );
+      },
+    },
     { field: 'capacity', headerName: 'Capacité', flex: 1 },
     { field: 'postal_code', headerName: 'Code Postal', flex: 2 },
     { field: 'city', headerName: 'Ville', flex: 2 },
@@ -76,7 +103,7 @@ export default function Home() {
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Button variant="outlined" component={Link} to={`/band/${params.row.id}`} size="small">
+        <Button variant="outlined" component={Link} to={`/venue/${params.row.id}`} size="small">
           Voir la Salle
         </Button>
       ),
@@ -176,11 +203,20 @@ export default function Home() {
           loading={loading}
           showToolbar
           density="comfortable"
+          columnVisibilityModel={{
+            country: false,
+          }}
           getRowId={(row) => row.id}
           getRowHeight={() => 'auto'}
           initialState={{
             pagination: {
               paginationModel: { pageSize: 5 },
+            },
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterExcludeHiddenColumns: false,
+              },
             },
           }}
           pageSizeOptions={[5, 10, 25, 50, 100]}
