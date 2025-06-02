@@ -47,6 +47,18 @@ export default function Home() {
     { field: 'department', headerName: 'Département', flex: 1 },
     { field: 'region', headerName: 'Région', flex: 1 },
     { field: 'country', headerName: 'Pays', flex: 1 },
+    {
+      field: 'action',
+      flex: 1,
+      headerName: '',
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Button variant="outlined" component={Link} to={`/band/${params.row.id}`} size="small">
+          Voir le groupe
+        </Button>
+      ),
+    },
   ];
 
   const venueColumns = [
@@ -57,6 +69,18 @@ export default function Home() {
     { field: 'department', headerName: 'Département', flex: 2 },
     { field: 'region', headerName: 'Région', flex: 2 },
     { field: 'country', headerName: 'Pays', flex: 2 },
+    {
+      field: 'action',
+      flex: 1,
+      headerName: '',
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Button variant="outlined" component={Link} to={`/band/${params.row.id}`} size="small">
+          Voir la Salle
+        </Button>
+      ),
+    },
   ];
 
   return (
@@ -97,11 +121,20 @@ export default function Home() {
           loading={loading}
           showToolbar
           density="comfortable"
+          columnVisibilityModel={{
+            country: false,
+          }}
           getRowId={(row) => row.id}
           getRowHeight={() => 'auto'}
           initialState={{
             pagination: {
               paginationModel: { pageSize: 5 },
+            },
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterExcludeHiddenColumns: false,
+              },
             },
           }}
           pageSizeOptions={[5, 10, 25, 50, 100]}
@@ -121,6 +154,12 @@ export default function Home() {
               fontSize: '0.95rem',
               fontWeight: 600,
               paddingY: '6px',
+            },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
+            '& .MuiDataGrid-window': {
+              overflow: 'hidden !important',
             },
           }}
           localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
@@ -161,6 +200,12 @@ export default function Home() {
               fontSize: '0.95rem',
               fontWeight: 600,
               paddingY: '6px',
+            },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
+            '& .MuiDataGrid-window': {
+              overflow: 'hidden !important',
             },
           }}
           localeText={frFR.components.MuiDataGrid.defaultProps.localeText}

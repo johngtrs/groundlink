@@ -14,4 +14,11 @@ class BandController extends Controller
 
         return response()->json($bands);
     }
+
+    public function show(Band $band): JsonResponse
+    {
+        $band->load('genres');
+
+        return response()->json($band);
+    }
 }

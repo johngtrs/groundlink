@@ -14,4 +14,9 @@ class VenueController extends Controller
 
         return response()->json($venues);
     }
+
+    public function show(Venue $venue): JsonResponse
+    {
+        return response()->json($venue);
+    }
 }

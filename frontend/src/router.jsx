@@ -5,12 +5,13 @@ import GuardedRoute from './routes/GuardedRoute';
 import Home from './pages/Home';
 import ProfileView from './pages/ProfileView';
 import ProfileEdit from './pages/ProfileEdit';
+import BandView from './pages/BandView';
+import VenueView from './pages/VenueView';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-  },
+  { path: '/', element: <Home /> },
+  { path: '/band/:id', element: <BandView /> },
+  { path: '/venue/:id', element: <VenueView /> },
   {
     element: <GuardedRoute requireAuth={false} redirectTo="/" />,
     children: [
