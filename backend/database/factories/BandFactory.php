@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BandFactory extends Factory
 {
-    protected $model = Band::class;
-
     public function definition(): array
     {
         return [

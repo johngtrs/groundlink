@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VenueFactory extends Factory
 {
-    protected $model = Venue::class;
-
     public function definition(): array
     {
         return [
