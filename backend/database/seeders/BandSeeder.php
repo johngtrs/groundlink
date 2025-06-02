@@ -36,7 +36,7 @@ class BandSeeder extends Seeder
             $user = $band->user()->create([
                 'name'     => $bandData['name'],
                 'email'    => Str::slug($bandData['name']) . '@example.com',
-                'password' => Hash::make('password'),
+                'password' => '$2y$12$O9oum81hgExwoSixLTpzdOaDrvluYPudzUgMOikW0kcJqsUM3nate',
             ]);
 
             $user->assignRole('band');

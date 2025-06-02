@@ -29,7 +29,7 @@ class VenueSeeder extends Seeder
             $user = $venue->user()->create([
                 'name'     => $venueData['name'],
                 'email'    => Str::slug($venueData['name']) . '@example.com',
-                'password' => Hash::make('password'),
+                'password' => '$2y$12$O9oum81hgExwoSixLTpzdOaDrvluYPudzUgMOikW0kcJqsUM3nate',
             ]);
 
             $user->assignRole('venue');
