@@ -39,13 +39,13 @@ export default function Home() {
     {
       field: 'name',
       headerName: 'Nom',
-      flex: 1,
+      flex: 2,
       renderCell: (params) => {
         const flag = getFlagEmoji(params.row.country_code);
         return (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <span>{flag}</span>
-            <span>{params.row.name}</span>
+            <Typography component="span">{flag}</Typography>
+            <Typography component="span">{params.row.name}</Typography>
           </Box>
         );
       },
@@ -68,7 +68,16 @@ export default function Home() {
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Button variant="outlined" component={Link} to={`/band/${params.row.id}`} size="small">
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/band/${params.row.id}`}
+          size="small"
+          sx={{
+            textAlign: 'center',
+            justifyContent: 'center',
+          }}
+        >
           Voir le groupe
         </Button>
       ),
@@ -84,8 +93,8 @@ export default function Home() {
         const flag = getFlagEmoji(params.row.country_code);
         return (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <span>{flag}</span>
-            <span>{params.row.name}</span>
+            <Typography component="span">{flag}</Typography>
+            <Typography component="span">{params.row.name}</Typography>
           </Box>
         );
       },
@@ -103,7 +112,16 @@ export default function Home() {
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Button variant="outlined" component={Link} to={`/venue/${params.row.id}`} size="small">
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/venue/${params.row.id}`}
+          size="small"
+          sx={{
+            textAlign: 'center',
+            justifyContent: 'center',
+          }}
+        >
           Voir la Salle
         </Button>
       ),
