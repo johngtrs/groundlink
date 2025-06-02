@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         // Register a band user
         User::registerWithType([
-            'name'     => 'Landvmrks',
+            'name'     => 'Band',
             'email'    => 'band@example.com',
             'password' => 'password',
             'type'     => 'band',
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
 
         // Register a venue user
         User::registerWithType([
-            'name'     => 'Altherax',
+            'name'     => 'Venue',
             'email'    => 'venue@example.com',
             'password' => 'password',
             'type'     => 'venue',
