@@ -13,10 +13,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        if (User::count() > 0) {
-            return;
-        }
-
         // Register a band user
         User::registerWithType([
             'name'     => 'Band',

@@ -30,5 +30,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/genres', [GenreController::class, 'index']);
 });
 
+Route::get('/bands/{band}', [BandController::class, 'show']);
 Route::get('/bands', [BandController::class, 'index']);
+Route::get('/bands/{band}/avatar', [BandController::class, 'avatar']);
+
+Route::get('/venues/{venue}', [VenueController::class, 'show']);
 Route::get('/venues', [VenueController::class, 'index']);
+Route::get('/venues/{venue}/avatar', [VenueController::class, 'avatar']);

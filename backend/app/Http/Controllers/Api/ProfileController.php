@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\AvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
@@ -33,17 +34,18 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name'                     => ['required', 'string', 'max:255'],
-            'description'              => ['nullable', 'string', 'max:2000'],
-            'formatted_address'        => ['nullable', 'string', 'max:255'],
-            'city'                     => ['nullable', 'string', 'max:255'],
-            'postal_code'              => ['nullable', 'string', 'max:20'],
-            'country'                  => ['nullable', 'string', 'max:100'],
-            'region'                   => ['nullable', 'string', 'max:255'],
-            'department'               => ['nullable', 'string', 'max:255'],
-            'lat'                      => ['nullable', 'numeric'],
-            'lng'                      => ['nullable', 'numeric'],
-            'place_id'                 => ['nullable', 'string', 'max:255'],
+            'name'                          => ['required', 'string', 'max:255'],
+            'description'                   => ['nullable', 'string', 'max:2000'],
+            'formatted_address'             => ['nullable', 'string', 'max:255'],
+            'city'                          => ['nullable', 'string', 'max:255'],
+            'postal_code'                   => ['nullable', 'string', 'max:20'],
+            'country'                       => ['nullable', 'string', 'max:100'],
+            'country_code'                  => ['nullable', 'string', 'max:100'],
+            'region'                        => ['nullable', 'string', 'max:255'],
+            'department'                    => ['nullable', 'string', 'max:255'],
+            'lat'                           => ['nullable', 'numeric'],
+            'lng'                           => ['nullable', 'numeric'],
+            'place_id'                      => ['nullable', 'string', 'max:255'],
             // Band
             'genres'          => ['nullable', 'array'],
             'spotify'         => ['nullable', 'url', 'max:2048'],
@@ -66,16 +68,11 @@ class ProfileController extends Controller
         return response()->json($user->fresh()->load('typeable'));
     }
 
-    public function getAvatar(Request $request)
+    public function getAvatar(Request $request, AvatarService $avatarService)
     {
         $user = $request->user();
-        $path = $this->getAvatarPath($user->type, $user->typeable->id);
 
-        if (!Storage::disk('private')->exists($path)) {
-            return response()->json(['message' => 'Avatar non trouvé'], 204);
-        }
-
-        return response()->file(Storage::disk('private')->path($path));
+        return $avatarService->getAvatarResponse($user->type, $user->typeable->id);
     }
 
     public function updateAvatar(Request $request)

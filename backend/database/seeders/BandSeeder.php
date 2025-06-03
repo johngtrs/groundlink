@@ -17,13 +17,14 @@ class BandSeeder extends Seeder
 
         foreach ($bands as $bandData) {
             $band = Band::factory()->create([
-                'name'                => $bandData['name'],
-                'formatted_address'   => $bandData['formatted_address'],
-                'postal_code'         => $bandData['postal_code'],
-                'city'                => $bandData['city'],
-                'department'          => $bandData['department'],
-                'region'              => $bandData['region'],
-                'country'             => $bandData['country'],
+                'name'              => $bandData['name'],
+                'formatted_address' => $bandData['formatted_address'],
+                'postal_code'       => $bandData['postal_code'],
+                'city'              => $bandData['city'],
+                'department'        => $bandData['department'],
+                'region'            => $bandData['region'],
+                'country'           => $bandData['country'],
+                'country_code'      => $bandData['country_code'],
             ]);
 
             foreach ($bandData['genres'] as $genreName) {

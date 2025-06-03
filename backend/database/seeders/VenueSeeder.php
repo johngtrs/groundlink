@@ -24,6 +24,7 @@ class VenueSeeder extends Seeder
                 'department'        => $venueData['department'],
                 'region'            => $venueData['region'],
                 'country'           => $venueData['country'],
+                'country_code'      => $venueData['country_code'],
             ]);
 
             $user = $venue->user()->create([

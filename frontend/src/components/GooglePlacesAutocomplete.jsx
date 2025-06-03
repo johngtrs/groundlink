@@ -75,7 +75,6 @@ const fetchSuggestions = debounce((input, sessionToken, types, callback) => {
       input,
       sessionToken,
       types,
-      componentRestrictions: { country: 'fr' },
     },
     callback
   );
@@ -164,8 +163,10 @@ export default function GooglePlacesAutocomplete({ label, value, onChange, limit
           (place, status) => {
             if (status !== window.google.maps.places.PlacesServiceStatus.OK || !place) return;
 
-            const get = (type) =>
-              place.address_components.find((c) => c.types.includes(type))?.long_name || '';
+            const get = (type, useShortName = false) => {
+              const component = place.address_components.find((c) => c.types.includes(type));
+              return useShortName ? component?.short_name || '' : component?.long_name || '';
+            };
 
             const parsed = {
               formatted_address: place.formatted_address,
@@ -174,6 +175,7 @@ export default function GooglePlacesAutocomplete({ label, value, onChange, limit
               city: get('locality'),
               postal_code: get('postal_code'),
               country: get('country'),
+              country_code: get('country', true),
               region: get('administrative_area_level_1'),
               department: get('administrative_area_level_2'),
               lat: place.geometry?.location?.lat() ?? null,

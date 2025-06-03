@@ -16,6 +16,7 @@ class BandData
                 'department'        => 'Bouches-du-Rhône',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Aurore',
@@ -26,6 +27,7 @@ class BandData
                 'department'        => 'Bouches-du-Rhône',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'In Other Climes',
@@ -36,6 +38,7 @@ class BandData
                 'department'        => 'Alpes Maritimes',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Soul Splitter',
@@ -46,6 +49,7 @@ class BandData
                 'department'        => 'Alpes Maritimes',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Common Ennemies',
@@ -56,6 +60,7 @@ class BandData
                 'department'        => 'Alpes Maritimes',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Bullet for My Valentine',
@@ -66,6 +71,7 @@ class BandData
                 'department'        => 'Bridgend County',
                 'region'            => 'Pays de Galles',
                 'country'           => 'Royaume-Uni',
+                'country_code'      => 'GB',
             ],
             [
                 'name'              => 'Trivium',
@@ -76,6 +82,7 @@ class BandData
                 'department'        => 'Orange County',
                 'region'            => 'Floride',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'As I Lay Dying',
@@ -86,6 +93,7 @@ class BandData
                 'department'        => 'San Diego County',
                 'region'            => 'Californie',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'Machine Head',
@@ -96,6 +104,7 @@ class BandData
                 'department'        => 'Alameda County',
                 'region'            => 'Californie',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'Children of Bodom',
@@ -106,6 +115,7 @@ class BandData
                 'department'        => 'Uusimaa',
                 'region'            => 'Uusimaa',
                 'country'           => 'Finlande',
+                'country_code'      => 'FI',
             ],
             [
                 'name'              => 'Avenged Sevenfold',
@@ -116,6 +126,7 @@ class BandData
                 'department'        => 'Orange County',
                 'region'            => 'Californie',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'Korn',
@@ -126,6 +137,7 @@ class BandData
                 'department'        => 'Kern County',
                 'region'            => 'Californie',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'Slipknot',
@@ -136,6 +148,7 @@ class BandData
                 'department'        => 'Polk County',
                 'region'            => 'Iowa',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'Linkin Park',
@@ -146,6 +159,7 @@ class BandData
                 'department'        => 'Los Angeles County',
                 'region'            => 'Californie',
                 'country'           => 'États-Unis',
+                'country_code'      => 'US',
             ],
             [
                 'name'              => 'Novelists',
@@ -156,6 +170,7 @@ class BandData
                 'department'        => 'Bouches-du-Rhône',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Resolve',
@@ -166,6 +181,7 @@ class BandData
                 'department'        => 'Bouches-du-Rhône',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Ten56',
@@ -176,6 +192,7 @@ class BandData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Any Given Day',
@@ -186,6 +203,7 @@ class BandData
                 'department'        => 'Rhénanie-du-Nord-Westphalie',
                 'region'            => 'Rhénanie-du-Nord-Westphalie',
                 'country'           => 'Allemagne',
+                'country_code'      => 'DE',
             ],
             [
                 'name'              => 'Heaven Shall Burn',
@@ -196,6 +214,7 @@ class BandData
                 'department'        => 'Thuringe',
                 'region'            => 'Thuringe',
                 'country'           => 'Allemagne',
+                'country_code'      => 'DE',
             ],
             [
                 'name'              => 'In Flames',
@@ -206,6 +225,7 @@ class BandData
                 'department'        => 'Västra Götaland',
                 'region'            => 'Västra Götaland',
                 'country'           => 'Suède',
+                'country_code'      => 'SE',
             ],
         ];
     }

@@ -16,6 +16,7 @@ class VenueData
                 'department'        => 'Alpes-Maritimes',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Monster\'s Art',
@@ -26,6 +27,7 @@ class VenueData
                 'department'        => 'Var',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Le Bataclan',
@@ -36,6 +38,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Zénith de Paris - La Villette',
@@ -46,6 +49,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Accor Arena',
@@ -56,6 +60,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Stade de France',
@@ -66,6 +71,7 @@ class VenueData
                 'department'        => 'Seine-Saint-Denis',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Le Molotov',
@@ -76,6 +82,7 @@ class VenueData
                 'department'        => 'Bouches-du-Rhône',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Petit Bain',
@@ -86,6 +93,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'La Cigale',
@@ -96,6 +104,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'L\'Élysée Montmartre',
@@ -106,6 +115,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Le Plan',
@@ -116,6 +126,7 @@ class VenueData
                 'department'        => 'Essonne',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Rock\'n\'Eat',
@@ -126,6 +137,7 @@ class VenueData
                 'department'        => 'Rhône',
                 'region'            => 'Auvergne-Rhône-Alpes',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'La Coopérative de Mai',
@@ -136,6 +148,7 @@ class VenueData
                 'department'        => 'Puy-de-Dôme',
                 'region'            => 'Auvergne-Rhône-Alpes',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'C\'PICAUD',
@@ -146,6 +159,7 @@ class VenueData
                 'department'        => 'Alpes-Maritimes',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'La Vapeur',
@@ -156,6 +170,7 @@ class VenueData
                 'department'        => 'Côte-d\'Or',
                 'region'            => 'Bourgogne-Franche-Comté',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'La Cartonnerie',
@@ -166,6 +181,7 @@ class VenueData
                 'department'        => 'Marne',
                 'region'            => 'Grand Est',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Le Kilowatt',
@@ -176,6 +192,7 @@ class VenueData
                 'department'        => 'Val-de-Marne',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Esterel Arena',
@@ -186,6 +203,7 @@ class VenueData
                 'department'        => 'Var',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Salle Pleyel',
@@ -196,6 +214,7 @@ class VenueData
                 'department'        => 'Paris',
                 'region'            => 'Île-de-France',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
             [
                 'name'              => 'Le Makeda',
@@ -206,6 +225,7 @@ class VenueData
                 'department'        => 'Bouches-du-Rhône',
                 'region'            => 'Provence-Alpes-Côte d\'Azur',
                 'country'           => 'France',
+                'country_code'      => 'FR',
             ],
         ];
     }
