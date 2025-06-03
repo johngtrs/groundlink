@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Box, Typography, Paper, Stack, CircularProgress, Button } from '@mui/material';
 import api from '../api/axios';
 import ExternalLink from '../components/ExternalLink';
+import AvatarViewer from '../components/AvatarViewer';
 
 export default function VenueView() {
   const { id } = useParams();
@@ -29,6 +30,8 @@ export default function VenueView() {
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center' }}>
           {venue.name}
         </Typography>
+
+        <AvatarViewer endpoint={`/api/venues/${id}/avatar`} />
 
         <Stack spacing={2} mt={2}>
           <Typography>

@@ -21,6 +21,7 @@ export default function ResponsiveDataGrid({
     <Box sx={{ overflowX: isMobile ? 'auto' : 'visible' }}>
       <Box
         sx={{
+          minWidth: isMobile ? 1000 : '100%',
           display: 'flex',
           flexDirection: 'column',
           flexGrow: 1,
@@ -52,10 +53,10 @@ export default function ResponsiveDataGrid({
               lineHeight: 1.4,
               paddingTop: '8px',
               paddingBottom: '8px',
-              fontSize: isMobile ? '0.75rem' : '0.9rem',
+              fontSize: '0.9rem',
             },
             '& .MuiDataGrid-columnHeaders': {
-              fontSize: isMobile ? '0.8rem' : '0.95rem',
+              fontSize: '0.95rem',
               fontWeight: 600,
               paddingY: '6px',
             },

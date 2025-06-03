@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Box, Typography, Paper, Stack, CircularProgress, Button } from '@mui/material';
+import { Box, Typography, Paper, Stack, CircularProgress, Button, Avatar } from '@mui/material';
 import api from '../api/axios';
 import ExternalLink from '../components/ExternalLink';
+import AvatarViewer from '../components/AvatarViewer';
 
 export default function BandView() {
   const { id } = useParams();
@@ -29,6 +30,8 @@ export default function BandView() {
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center' }}>
           {band.name}
         </Typography>
+
+        <AvatarViewer endpoint={`/api/bands/${id}/avatar`} />
 
         <Stack spacing={2} mt={2}>
           <Typography>
