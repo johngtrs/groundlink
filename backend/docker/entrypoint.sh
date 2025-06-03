@@ -14,7 +14,14 @@ composer install
 
 # Laravel maintenance & DB setup
 php artisan migrate --force
-php artisan db:seed
+
+# Only seed if database is empty (example: no users)
+if [ "$(php artisan tinker --execute='echo \App\Models\User::count();')" -eq "0" ]; then
+  echo "Seeding database..."
+  php artisan db:seed
+else
+  echo "Database already seeded, skipping."
+fi
 
 php artisan event:clear
 php artisan view:clear

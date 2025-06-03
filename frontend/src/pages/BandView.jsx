@@ -32,7 +32,7 @@ export default function BandView() {
 
         <Stack spacing={2} mt={2}>
           <Typography>
-            <strong>Adresse :</strong> {band.formatted_address}
+            <strong>Ville :</strong> {band.formatted_address}
           </Typography>
           <Typography>
             <strong>Genres :</strong> {band.genres.map((g) => g.name).join(', ')}

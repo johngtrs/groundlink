@@ -1,6 +1,6 @@
 import { Box, Button, Typography, Stack, Paper } from '@mui/material';
 import { useAuth } from '../context/useAuth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { frFR } from '@mui/x-data-grid/locales';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ export default function Home() {
   const [bands, setBands] = useState([]);
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +35,10 @@ export default function Home() {
   }, []);
 
   if (initialLoading) return null;
+
+  const handleRowDoubleClick = (type) => (params) => {
+    navigate(`/${type}/${params.row.id}`);
+  };
 
   const bandColumns = [
     {
@@ -100,7 +105,7 @@ export default function Home() {
       },
     },
     { field: 'capacity', headerName: 'Capacité', flex: 1 },
-    { field: 'postal_code', headerName: 'Code Postal', flex: 2 },
+    { field: 'postal_code', headerName: 'Code Postal', flex: 1 },
     { field: 'city', headerName: 'Ville', flex: 2 },
     { field: 'department', headerName: 'Département', flex: 2 },
     { field: 'region', headerName: 'Région', flex: 2 },
@@ -166,6 +171,7 @@ export default function Home() {
           loading={loading}
           showToolbar
           density="comfortable"
+          onRowDoubleClick={handleRowDoubleClick('band')}
           columnVisibilityModel={{
             country: false,
           }}
@@ -221,6 +227,7 @@ export default function Home() {
           loading={loading}
           showToolbar
           density="comfortable"
+          onRowDoubleClick={handleRowDoubleClick('venue')}
           columnVisibilityModel={{
             country: false,
           }}
