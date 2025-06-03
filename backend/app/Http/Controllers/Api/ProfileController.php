@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\AvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
@@ -67,16 +68,11 @@ class ProfileController extends Controller
         return response()->json($user->fresh()->load('typeable'));
     }
 
-    public function getAvatar(Request $request)
+    public function getAvatar(Request $request, AvatarService $avatarService)
     {
         $user = $request->user();
-        $path = $this->getAvatarPath($user->type, $user->typeable->id);
 
-        if (!Storage::disk('private')->exists($path)) {
-            return response()->json(['message' => 'Avatar non trouvé'], 204);
-        }
-
-        return response()->file(Storage::disk('private')->path($path));
+        return $avatarService->getAvatarResponse($user->type, $user->typeable->id);
     }
 
     public function updateAvatar(Request $request)
