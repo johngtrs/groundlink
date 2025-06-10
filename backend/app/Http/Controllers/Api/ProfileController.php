@@ -103,7 +103,7 @@ class ProfileController extends Controller
             Storage::disk('private')->delete($path);
         }
 
-        return response()->json(['message' => 'Avatar updated']);
+        return response()->json(['message' => 'Avatar deleted']);
     }
 
     private function getAvatarPath(string $type, int $id): string
